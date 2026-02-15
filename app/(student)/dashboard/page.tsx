@@ -48,7 +48,7 @@ export default function StudentDashboard() {
         <StatCard
           icon={ClipboardList}
           label={t("activeRequests")}
-          value={stats && "active" in stats ? stats.active : 0}
+          value={stats && "active" in stats ? stats.active ?? 0 : 0}
           color="#007AFF"
         />
         <StatCard
@@ -61,7 +61,7 @@ export default function StudentDashboard() {
         <StatCard
           icon={FileText}
           label={t("totalRequests")}
-          value={stats && "total" in stats ? stats.total : 0}
+          value={stats && "total" in stats ? stats.total ?? 0 : 0}
           color="#34C759"
         />
       </div>
