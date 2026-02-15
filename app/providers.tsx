@@ -31,6 +31,11 @@ export function Providers({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setLocaleState(getStoredLocale());
+
+    // Register Service Worker for PWA
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
   }, []);
 
   const setLocale = useCallback((newLocale: Locale) => {

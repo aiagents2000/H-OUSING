@@ -41,7 +41,10 @@
     "details": "Dettagli",
     "markAllRead": "Segna tutte come lette",
     "notifications": "Notifiche",
-    "noNotifications": "Nessuna notifica"
+    "noNotifications": "Nessuna notifica",
+    "clearAll": "Rimuovi tutti",
+    "activeFilters": "Filtri attivi",
+    "resultsCount": "{count} risultati"
   },
   "auth": {
     "signIn": "Accedi",

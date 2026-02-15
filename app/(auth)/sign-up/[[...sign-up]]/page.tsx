@@ -24,6 +24,7 @@ export default function SignUpPage() {
             formFieldInput:
               "rounded-lg border-border focus:ring-primary",
             footerActionLink: "text-primary hover:text-primary/80",
+            footer: "hidden",
           },
         }}
       />

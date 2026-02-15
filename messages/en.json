@@ -41,7 +41,10 @@
     "details": "Details",
     "markAllRead": "Mark all as read",
     "notifications": "Notifications",
-    "noNotifications": "No notifications"
+    "noNotifications": "No notifications",
+    "clearAll": "Clear all",
+    "activeFilters": "Active filters",
+    "resultsCount": "{count} results"
   },
   "auth": {
     "signIn": "Sign In",

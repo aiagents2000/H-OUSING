@@ -45,7 +45,7 @@ export default function StaffDashboard() {
 
   const avgHours =
     "avgResolutionTimeMs" in stats
-      ? Math.round(stats.avgResolutionTimeMs / (1000 * 60 * 60))
+      ? Math.round((stats.avgResolutionTimeMs ?? 0) / (1000 * 60 * 60))
       : 0;
 
   const recent = recentRequests?.slice(0, 5) || [];
@@ -58,19 +58,19 @@ export default function StaffDashboard() {
         <StaffStatCard
           icon={ClipboardList}
           label={t("openRequests")}
-          value={"open" in stats ? stats.open : 0}
+          value={"open" in stats ? stats.open ?? 0 : 0}
           color="#007AFF"
         />
         <StaffStatCard
           icon={Clock}
           label={t("inProgressRequests")}
-          value={"inProgress" in stats ? stats.inProgress : 0}
+          value={"inProgress" in stats ? stats.inProgress ?? 0 : 0}
           color="#FF9500"
         />
         <StaffStatCard
           icon={CheckCircle2}
           label={t("completedThisWeek")}
-          value={"completedThisWeek" in stats ? stats.completedThisWeek : 0}
+          value={"completedThisWeek" in stats ? stats.completedThisWeek ?? 0 : 0}
           color="#34C759"
         />
         <StaffStatCard

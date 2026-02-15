@@ -42,7 +42,7 @@ import {
 import { formatDistanceToNow, format } from "date-fns";
 import { it, enUS } from "date-fns/locale";
 import { useAppLocale } from "@/lib/i18n";
-import { Search, Eye, Mail } from "lucide-react";
+import { Search, Eye, Mail, X, Filter } from "lucide-react";
 import { Id } from "@/convex/_generated/dataModel";
 
 export function RequestTable() {
@@ -77,65 +77,151 @@ export function RequestTable() {
       : "skip"
   );
 
+  const hasActiveFilters =
+    statusFilter !== "all" ||
+    categoryFilter !== "all" ||
+    priorityFilter !== "all" ||
+    buildingFilter !== "all" ||
+    searchQuery !== "";
+
+  const activeFilterChips: { label: string; onClear: () => void }[] = [];
+  if (statusFilter !== "all") {
+    activeFilterChips.push({
+      label: `${t("common.status")}: ${t(`statuses.${statusFilter}`)}`,
+      onClear: () => setStatusFilter("all"),
+    });
+  }
+  if (categoryFilter !== "all") {
+    activeFilterChips.push({
+      label: `${t("common.category")}: ${t(`categories.${categoryFilter}`)}`,
+      onClear: () => setCategoryFilter("all"),
+    });
+  }
+  if (priorityFilter !== "all") {
+    activeFilterChips.push({
+      label: `${t("common.priority")}: ${t(`priorities.${priorityFilter}`)}`,
+      onClear: () => setPriorityFilter("all"),
+    });
+  }
+  if (buildingFilter !== "all") {
+    activeFilterChips.push({
+      label: `${t("common.building")}: ${buildingFilter}`,
+      onClear: () => setBuildingFilter("all"),
+    });
+  }
+  if (searchQuery) {
+    activeFilterChips.push({
+      label: `${t("common.search").replace("...", "")}: "${searchQuery}"`,
+      onClear: () => setSearchQuery(""),
+    });
+  }
+
+  const clearAllFilters = () => {
+    setStatusFilter("all");
+    setCategoryFilter("all");
+    setPriorityFilter("all");
+    setBuildingFilter("all");
+    setSearchQuery("");
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Filters */}
-      <div className="flex flex-wrap gap-2">
-        <div className="relative flex-1 min-w-48">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder={t("common.search")}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 h-9"
-          />
+      <div className="ios-card rounded-xl p-3 space-y-3">
+        <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+          <Filter className="h-4 w-4" />
+          {t("common.filters")}
         </div>
-        <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as RequestStatus | "all")}>
-          <SelectTrigger className="w-36 h-9">
-            <SelectValue placeholder={t("common.status")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("common.all")}</SelectItem>
-            {(Object.keys(REQUEST_STATUSES) as RequestStatus[]).map((s) => (
-              <SelectItem key={s} value={s}>{t(`statuses.${s}`)}</SelectItem>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+          <div className="relative col-span-2 sm:col-span-3 lg:col-span-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder={t("common.search")}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 h-9"
+            />
+          </div>
+          <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as RequestStatus | "all")}>
+            <SelectTrigger className="h-9">
+              <SelectValue placeholder={t("common.status")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t("common.all")}</SelectItem>
+              {(Object.keys(REQUEST_STATUSES) as RequestStatus[]).map((s) => (
+                <SelectItem key={s} value={s}>{t(`statuses.${s}`)}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={categoryFilter} onValueChange={(v) => setCategoryFilter(v as RequestCategory | "all")}>
+            <SelectTrigger className="h-9">
+              <SelectValue placeholder={t("common.category")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t("common.all")}</SelectItem>
+              {(Object.keys(REQUEST_CATEGORIES) as RequestCategory[]).map((c) => (
+                <SelectItem key={c} value={c}>{t(`categories.${c}`)}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={priorityFilter} onValueChange={(v) => setPriorityFilter(v as RequestPriority | "all")}>
+            <SelectTrigger className="h-9">
+              <SelectValue placeholder={t("common.priority")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t("common.all")}</SelectItem>
+              {(Object.keys(REQUEST_PRIORITIES) as RequestPriority[]).map((p) => (
+                <SelectItem key={p} value={p}>{t(`priorities.${p}`)}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={buildingFilter} onValueChange={(v) => setBuildingFilter(v as "A" | "B" | "all")}>
+            <SelectTrigger className="h-9">
+              <SelectValue placeholder={t("common.building")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t("common.all")}</SelectItem>
+              <SelectItem value="A">{t("common.building")} A</SelectItem>
+              <SelectItem value="B">{t("common.building")} B</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Active filter chips */}
+        {hasActiveFilters && (
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            <span className="text-xs text-muted-foreground">{t("common.activeFilters")}:</span>
+            {activeFilterChips.map((chip, i) => (
+              <Badge
+                key={i}
+                variant="secondary"
+                className="text-xs gap-1 pr-1 cursor-pointer hover:bg-secondary/80"
+                onClick={chip.onClear}
+              >
+                {chip.label}
+                <X className="h-3 w-3" />
+              </Badge>
             ))}
-          </SelectContent>
-        </Select>
-        <Select value={categoryFilter} onValueChange={(v) => setCategoryFilter(v as RequestCategory | "all")}>
-          <SelectTrigger className="w-36 h-9">
-            <SelectValue placeholder={t("common.category")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("common.all")}</SelectItem>
-            {(Object.keys(REQUEST_CATEGORIES) as RequestCategory[]).map((c) => (
-              <SelectItem key={c} value={c}>{t(`categories.${c}`)}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={priorityFilter} onValueChange={(v) => setPriorityFilter(v as RequestPriority | "all")}>
-          <SelectTrigger className="w-32 h-9">
-            <SelectValue placeholder={t("common.priority")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("common.all")}</SelectItem>
-            {(Object.keys(REQUEST_PRIORITIES) as RequestPriority[]).map((p) => (
-              <SelectItem key={p} value={p}>{t(`priorities.${p}`)}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={buildingFilter} onValueChange={(v) => setBuildingFilter(v as "A" | "B" | "all")}>
-          <SelectTrigger className="w-32 h-9">
-            <SelectValue placeholder={t("common.building")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("common.all")}</SelectItem>
-            <SelectItem value="A">{t("common.building")} A</SelectItem>
-            <SelectItem value="B">{t("common.building")} B</SelectItem>
-          </SelectContent>
-        </Select>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 text-xs text-muted-foreground px-2"
+              onClick={clearAllFilters}
+            >
+              {t("common.clearAll")}
+            </Button>
+          </div>
+        )}
       </div>
 
-      {/* Table */}
+      {/* Results count */}
+      {requests && (
+        <p className="text-xs text-muted-foreground px-1">
+          {t("common.resultsCount", { count: requests.length })}
+        </p>
+      )}
+
+      {/* Table (desktop) / Cards (mobile) */}
       {!requests ? (
         <TableSkeleton rows={8} />
       ) : requests.length === 0 ? (
@@ -143,81 +229,135 @@ export function RequestTable() {
           {t("requests.noRequests")}
         </div>
       ) : (
-        <div className="ios-card rounded-xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t("requests.studentName")}</TableHead>
-                  <TableHead>{t("common.room")}</TableHead>
-                  <TableHead className="hidden sm:table-cell">{t("common.category")}</TableHead>
-                  <TableHead>{t("common.priority")}</TableHead>
-                  <TableHead>{t("common.status")}</TableHead>
-                  <TableHead className="hidden md:table-cell">{t("common.date")}</TableHead>
-                  <TableHead>{t("common.actions")}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {requests.map((req) => {
-                  const statusConfig = REQUEST_STATUSES[req.status as RequestStatus];
-                  const priorityConfig = REQUEST_PRIORITIES[req.priority as RequestPriority];
-                  const catConfig = REQUEST_CATEGORIES[req.category as RequestCategory];
-                  const CatIcon = catConfig.icon;
+        <>
+          {/* Mobile card view */}
+          <div className="block lg:hidden space-y-2">
+            {requests.map((req) => {
+              const statusConfig = REQUEST_STATUSES[req.status as RequestStatus];
+              const priorityConfig = REQUEST_PRIORITIES[req.priority as RequestPriority];
+              const catConfig = REQUEST_CATEGORIES[req.category as RequestCategory];
+              const CatIcon = catConfig.icon;
 
-                  return (
-                    <TableRow key={req._id}>
-                      <TableCell className="font-medium">
-                        {req.studentName}
-                      </TableCell>
-                      <TableCell>
-                        {req.roomNumber}{req.building}
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <div className="flex items-center gap-1.5">
-                          <CatIcon className="h-3.5 w-3.5" style={{ color: catConfig.color }} />
-                          <span className="text-sm">{t(`categories.${req.category}`)}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="border-0 text-xs" style={{
-                          backgroundColor: priorityConfig.bgColor,
-                          color: priorityConfig.color,
-                        }}>
-                          {t(`priorities.${req.priority}`)}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="border-0 text-xs" style={{
-                          backgroundColor: statusConfig.bgColor,
-                          color: statusConfig.color,
-                        }}>
-                          {t(`statuses.${req.status}`)}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
-                        {formatDistanceToNow(new Date(req.createdAt), {
-                          addSuffix: true,
-                          locale: dateLocale,
-                        })}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8"
-                          onClick={() => setSelectedRequestId(req._id as Id<"maintenanceRequests">)}
-                          aria-label="View details"
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+              return (
+                <div
+                  key={req._id}
+                  className="ios-card rounded-xl p-3 space-y-2 cursor-pointer active:scale-[0.98] transition-transform"
+                  onClick={() => setSelectedRequestId(req._id as Id<"maintenanceRequests">)}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-sm truncate">{req.studentName}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {t("common.room")} {req.roomNumber}{req.building}
+                      </p>
+                    </div>
+                    <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
+                      {formatDistanceToNow(new Date(req.createdAt), {
+                        addSuffix: true,
+                        locale: dateLocale,
+                      })}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CatIcon className="h-3.5 w-3.5 shrink-0" style={{ color: catConfig.color }} />
+                    <span className="text-xs">{t(`categories.${req.category}`)}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="border-0 text-xs" style={{
+                      backgroundColor: statusConfig.bgColor,
+                      color: statusConfig.color,
+                    }}>
+                      {t(`statuses.${req.status}`)}
+                    </Badge>
+                    <Badge variant="outline" className="border-0 text-xs" style={{
+                      backgroundColor: priorityConfig.bgColor,
+                      color: priorityConfig.color,
+                    }}>
+                      {t(`priorities.${req.priority}`)}
+                    </Badge>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        </div>
+
+          {/* Desktop table view */}
+          <div className="hidden lg:block ios-card rounded-xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{t("requests.studentName")}</TableHead>
+                    <TableHead>{t("common.room")}</TableHead>
+                    <TableHead>{t("common.category")}</TableHead>
+                    <TableHead>{t("common.priority")}</TableHead>
+                    <TableHead>{t("common.status")}</TableHead>
+                    <TableHead>{t("common.date")}</TableHead>
+                    <TableHead>{t("common.actions")}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {requests.map((req) => {
+                    const statusConfig = REQUEST_STATUSES[req.status as RequestStatus];
+                    const priorityConfig = REQUEST_PRIORITIES[req.priority as RequestPriority];
+                    const catConfig = REQUEST_CATEGORIES[req.category as RequestCategory];
+                    const CatIcon = catConfig.icon;
+
+                    return (
+                      <TableRow key={req._id}>
+                        <TableCell className="font-medium">
+                          {req.studentName}
+                        </TableCell>
+                        <TableCell>
+                          {req.roomNumber}{req.building}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1.5">
+                            <CatIcon className="h-3.5 w-3.5" style={{ color: catConfig.color }} />
+                            <span className="text-sm">{t(`categories.${req.category}`)}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="border-0 text-xs" style={{
+                            backgroundColor: priorityConfig.bgColor,
+                            color: priorityConfig.color,
+                          }}>
+                            {t(`priorities.${req.priority}`)}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="border-0 text-xs" style={{
+                            backgroundColor: statusConfig.bgColor,
+                            color: statusConfig.color,
+                          }}>
+                            {t(`statuses.${req.status}`)}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-sm text-muted-foreground">
+                          {formatDistanceToNow(new Date(req.createdAt), {
+                            addSuffix: true,
+                            locale: dateLocale,
+                          })}
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => setSelectedRequestId(req._id as Id<"maintenanceRequests">)}
+                            aria-label="View details"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </>
       )}
 
       {/* Detail Modal */}
