@@ -142,7 +142,9 @@
     "room": "Room",
     "building": "Building",
     "memberSince": "Member Since",
-    "role": "Role"
+    "role": "Role",
+    "infoHelp": "Info & Help",
+    "infoHelpDesc": "FAQ, rules, and emergency contacts"
   },
   "room": {
     "title": "My Room",
@@ -163,6 +165,13 @@
     "totalRequests": "Total Requests",
     "hours": "hours",
     "days": "days"
+  },
+  "door": {
+    "openDoor": "Open Door",
+    "opening": "Opening...",
+    "opened": "Door Opened",
+    "openedDesc": "The door will stay unlocked for 5 seconds",
+    "building": "Building {building} - Main Entrance"
   },
   "info": {
     "faq": {

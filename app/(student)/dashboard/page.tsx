@@ -1,32 +1,56 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ClipboardList, DoorOpen, FileText, Plus } from "lucide-react";
+import {
+  ClipboardList,
+  DoorOpen,
+  FileText,
+  Plus,
+  UnlockKeyhole,
+  Check,
+  Loader2,
+} from "lucide-react";
 import { StatCard } from "@/components/student/dashboard-stats";
 import { RequestCard } from "@/components/student/request-card";
 import { RequestDetailModal } from "@/components/student/request-detail-modal";
 import { CardSkeleton, RequestCardSkeleton } from "@/components/shared/loading-states";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function StudentDashboard() {
   const t = useTranslations("dashboard");
   const tc = useTranslations("common");
+  const td = useTranslations("door");
   const currentUser = useQuery(api.users.getCurrentUser);
   const stats = useQuery(api.maintenanceRequests.getRequestStats);
   const requests = useQuery(api.maintenanceRequests.getRequestsByStudent, {});
   const [selectedRequest, setSelectedRequest] = useState<(typeof recentRequests)[number] | null>(null);
+  const [doorState, setDoorState] = useState<"idle" | "opening" | "opened">("idle");
 
   const recentRequests = requests?.slice(0, 3) || [];
+
+  const handleDoorOpen = useCallback(() => {
+    if (doorState !== "idle") return;
+    setDoorState("opening");
+
+    // TODO: Connect to control room API
+    setTimeout(() => {
+      setDoorState("opened");
+      toast.success(td("opened"), { description: td("openedDesc") });
+      setTimeout(() => setDoorState("idle"), 3000);
+    }, 1500);
+  }, [doorState, td]);
 
   if (!currentUser || stats === undefined) {
     return (
       <div className="space-y-6">
         <div className="h-8 w-48 bg-muted rounded animate-pulse" />
+        <div className="h-20 bg-muted rounded-xl animate-pulse" />
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <CardSkeleton />
           <CardSkeleton />
@@ -43,6 +67,47 @@ export default function StudentDashboard() {
           {t("welcome", { name: currentUser.fullName?.split(" ")[0] || "" })}
         </h1>
       </div>
+
+      {/* Door Opening Button - prominent card */}
+      <button
+        onClick={handleDoorOpen}
+        disabled={doorState !== "idle"}
+        className={cn(
+          "w-full rounded-2xl p-4 transition-all duration-300 active:scale-[0.98]",
+          "flex items-center gap-4 text-left",
+          "shadow-md border border-white/20",
+          doorState === "opened"
+            ? "bg-gradient-to-r from-green-500 to-emerald-600"
+            : "bg-gradient-to-r from-primary to-blue-600",
+        )}
+      >
+        <div className={cn(
+          "h-14 w-14 rounded-2xl flex items-center justify-center shrink-0",
+          "bg-white/20 backdrop-blur-sm",
+        )}>
+          {doorState === "opening" ? (
+            <Loader2 className="h-7 w-7 text-white animate-spin" />
+          ) : doorState === "opened" ? (
+            <Check className="h-7 w-7 text-white" />
+          ) : (
+            <UnlockKeyhole className="h-7 w-7 text-white" />
+          )}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-white font-bold text-base">
+            {doorState === "opening"
+              ? td("opening")
+              : doorState === "opened"
+                ? td("opened")
+                : td("openDoor")}
+          </p>
+          <p className="text-white/70 text-sm">
+            {doorState === "opened"
+              ? td("openedDesc")
+              : td("building", { building: currentUser.building || "A" })}
+          </p>
+        </div>
+      </button>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard
@@ -104,10 +169,10 @@ export default function StudentDashboard() {
         )}
       </div>
 
-      {/* Floating Action Button - mobile */}
+      {/* Floating Action Button - mobile, positioned above bottom nav */}
       <Link
         href="/requests/new"
-        className="fixed bottom-6 right-6 lg:hidden h-14 w-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform z-40"
+        className="fixed bottom-24 right-4 lg:bottom-6 lg:right-6 lg:hidden h-14 w-14 bg-green-500 text-white rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform z-40"
         aria-label="New request"
       >
         <Plus className="h-6 w-6" />

@@ -7,6 +7,7 @@ import { api } from "@/convex/_generated/api";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/shared/navbar";
 import { Sidebar } from "@/components/shared/sidebar";
+import { BottomNav } from "@/components/shared/bottom-nav";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Loader2 } from "lucide-react";
@@ -49,7 +50,7 @@ export default function StudentLayout({
           <Sidebar role="student" />
         </aside>
 
-        {/* Mobile sidebar */}
+        {/* Mobile sidebar (kept for desktop hamburger fallback) */}
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
           <SheetContent side="left" className="w-64 p-0 pt-8">
             <VisuallyHidden><SheetTitle>Menu</SheetTitle></VisuallyHidden>
@@ -59,14 +60,17 @@ export default function StudentLayout({
           </SheetContent>
         </Sheet>
 
-        {/* Main content */}
+        {/* Main content - pb-20 on mobile for bottom nav clearance */}
         <main
           id="main-content"
-          className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full"
+          className="flex-1 p-4 md:p-6 lg:p-8 pb-24 lg:pb-8 max-w-7xl mx-auto w-full"
         >
           {children}
         </main>
       </div>
+
+      {/* Mobile bottom navigation */}
+      <BottomNav />
     </div>
   );
 }

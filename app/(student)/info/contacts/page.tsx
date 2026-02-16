@@ -52,19 +52,19 @@ export default function ContactsPage() {
         <h1 className="text-2xl font-bold">{t("title")}</h1>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {contacts.map((contact, i) => {
           const Icon = contact.icon;
           return (
             <Card key={i} className="ios-card">
-              <CardContent className="p-4">
-                <div className="flex items-start gap-4">
+              <CardContent className="p-3 sm:p-4">
+                <div className="flex items-start gap-3 sm:gap-4">
                   <div
-                    className="h-12 w-12 rounded-xl flex items-center justify-center shrink-0"
+                    className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl flex items-center justify-center shrink-0"
                     style={{ backgroundColor: `${contact.color}15` }}
                   >
                     <Icon
-                      className="h-6 w-6"
+                      className="h-5 w-5 sm:h-6 sm:w-6"
                       style={{ color: contact.color }}
                     />
                   </div>
@@ -88,12 +88,12 @@ export default function ContactsPage() {
                         {contact.subtitle}
                       </p>
                     )}
-                    <div className="flex gap-2 mt-3">
+                    <div className="flex flex-col sm:flex-row gap-2 mt-3">
                       {contact.phone && (
                         <Button
                           asChild
                           size="sm"
-                          className="ios-button h-9"
+                          className="ios-button h-9 w-full sm:w-auto"
                         >
                           <a href={`tel:${contact.phone.replace(/\s/g, "")}`}>
                             <PhoneIcon className="h-3.5 w-3.5 mr-1.5" />
@@ -105,7 +105,7 @@ export default function ContactsPage() {
                         <Button
                           asChild
                           size="sm"
-                          className="ios-button h-9"
+                          className="ios-button h-9 w-full sm:w-auto"
                         >
                           <a href={`mailto:${contact.email}`}>
                             <Mail className="h-3.5 w-3.5 mr-1.5" />

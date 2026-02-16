@@ -7,12 +7,12 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RequestCard } from "@/components/student/request-card";
 import { RequestDetailModal } from "@/components/student/request-detail-modal";
 import { RequestCardSkeleton } from "@/components/shared/loading-states";
 import { Plus, Search, ClipboardList } from "lucide-react";
-import { type RequestStatus } from "@/lib/constants";
+import { type RequestStatus, REQUEST_STATUSES } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 export default function RequestsPage() {
   const t = useTranslations("requests");
@@ -36,6 +36,14 @@ export default function RequestsPage() {
     );
   });
 
+  const filterOptions: { value: RequestStatus | "all"; label: string }[] = [
+    { value: "all", label: tc("all") },
+    ...(Object.keys(REQUEST_STATUSES) as RequestStatus[]).map((s) => ({
+      value: s,
+      label: ts(s),
+    })),
+  ];
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -48,30 +56,25 @@ export default function RequestsPage() {
         </Button>
       </div>
 
-      {/* Filters */}
+      {/* Filters - horizontally scrollable pills */}
       <div className="space-y-3">
-        <Tabs
-          value={statusFilter}
-          onValueChange={(v) => setStatusFilter(v as RequestStatus | "all")}
-        >
-          <TabsList className="w-full flex overflow-x-auto">
-            <TabsTrigger value="all" className="flex-1">
-              {tc("all")}
-            </TabsTrigger>
-            <TabsTrigger value="open" className="flex-1">
-              {ts("open")}
-            </TabsTrigger>
-            <TabsTrigger value="in_progress" className="flex-1">
-              {ts("in_progress")}
-            </TabsTrigger>
-            <TabsTrigger value="completed" className="flex-1">
-              {ts("completed")}
-            </TabsTrigger>
-            <TabsTrigger value="rejected" className="flex-1">
-              {ts("rejected")}
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+          {filterOptions.map((option) => (
+            <button
+              key={option.value}
+              onClick={() => setStatusFilter(option.value)}
+              className={cn(
+                "whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition-all",
+                "shrink-0 active:scale-95",
+                statusFilter === option.value
+                  ? "bg-primary text-white shadow-sm"
+                  : "bg-accent text-muted-foreground hover:bg-accent/80"
+              )}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
 
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -117,10 +120,10 @@ export default function RequestsPage() {
         </div>
       )}
 
-      {/* FAB mobile */}
+      {/* FAB mobile - positioned above bottom nav */}
       <Link
         href="/requests/new"
-        className="fixed bottom-6 right-6 sm:hidden h-14 w-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform z-40"
+        className="fixed bottom-24 right-4 sm:hidden h-14 w-14 bg-green-500 text-white rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform z-40"
         aria-label="New request"
       >
         <Plus className="h-6 w-6" />

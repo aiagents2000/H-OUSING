@@ -3,15 +3,18 @@
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { PageLoader } from "@/components/shared/loading-states";
 import { format } from "date-fns";
+import { HelpCircle, FileText, Phone, ChevronRight } from "lucide-react";
 
 export default function ProfilePage() {
   const t = useTranslations("profile");
+  const tn = useTranslations("nav");
   const currentUser = useQuery(api.users.getCurrentUser);
 
   if (!currentUser) return <PageLoader />;
@@ -46,6 +49,12 @@ export default function ProfilePage() {
       label: t("memberSince"),
       value: format(new Date(currentUser.createdAt), "dd/MM/yyyy"),
     },
+  ];
+
+  const infoLinks = [
+    { href: "/info/faq", label: tn("faq"), icon: HelpCircle },
+    { href: "/info/rules", label: tn("rules"), icon: FileText },
+    { href: "/info/contacts", label: tn("contacts"), icon: Phone },
   ];
 
   return (
@@ -83,6 +92,32 @@ export default function ProfilePage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Info & Help section */}
+      {currentUser.role === "student" && (
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold mb-3">{t("infoHelp")}</h2>
+          <Card className="ios-card">
+            <CardContent className="p-0">
+              {infoLinks.map((item, i) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-accent active:bg-accent"
+                    style={i < infoLinks.length - 1 ? { borderBottom: "1px solid var(--border)" } : undefined}
+                  >
+                    <Icon className="h-5 w-5 text-primary shrink-0" />
+                    <span className="flex-1 text-sm font-medium">{item.label}</span>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  </Link>
+                );
+              })}
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

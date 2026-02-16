@@ -2,7 +2,12 @@
 
 import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { FileText } from "lucide-react";
 
 export default function RulesPage() {
@@ -21,20 +26,19 @@ export default function RulesPage() {
       </div>
 
       <Card className="ios-card">
-        <CardContent className="p-6">
-          <div className="space-y-6">
+        <CardContent className="p-3 sm:p-6">
+          <Accordion type="multiple" className="w-full">
             {sections.map((section, i) => (
-              <div key={i}>
-                {i > 0 && <Separator className="mb-6" />}
-                <h2 className="text-base font-semibold mb-3">
+              <AccordionItem key={i} value={`section-${i}`}>
+                <AccordionTrigger className="text-sm sm:text-base font-semibold text-left px-1 py-4 hover:no-underline">
                   {i + 1}. {section.title}
-                </h2>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                </AccordionTrigger>
+                <AccordionContent className="text-sm text-muted-foreground px-1 pb-4 leading-relaxed">
                   {section.content}
-                </p>
-              </div>
+                </AccordionContent>
+              </AccordionItem>
             ))}
-          </div>
+          </Accordion>
         </CardContent>
       </Card>
     </div>

@@ -26,14 +26,14 @@ export default function FAQPage() {
       </div>
 
       <Card className="ios-card">
-        <CardContent className="p-2 sm:p-4">
+        <CardContent className="p-3 sm:p-4">
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, i) => (
               <AccordionItem key={i} value={`item-${i}`}>
-                <AccordionTrigger className="text-sm font-medium text-left px-2 hover:no-underline">
+                <AccordionTrigger className="text-sm font-medium text-left px-2 py-4 hover:no-underline">
                   {faq.q}
                 </AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground px-2 leading-relaxed">
+                <AccordionContent className="text-sm text-muted-foreground px-2 pb-4 leading-relaxed">
                   {faq.a}
                 </AccordionContent>
               </AccordionItem>

@@ -142,7 +142,9 @@
     "room": "Stanza",
     "building": "Edificio",
     "memberSince": "Membro dal",
-    "role": "Ruolo"
+    "role": "Ruolo",
+    "infoHelp": "Info & Aiuto",
+    "infoHelpDesc": "FAQ, regolamento e contatti di emergenza"
   },
   "room": {
     "title": "La Mia Stanza",
@@ -163,6 +165,13 @@
     "totalRequests": "Richieste Totali",
     "hours": "ore",
     "days": "giorni"
+  },
+  "door": {
+    "openDoor": "Apri Porta",
+    "opening": "Apertura...",
+    "opened": "Porta Aperta",
+    "openedDesc": "La porta resterà aperta per 5 secondi",
+    "building": "Edificio {building} - Ingresso Principale"
   },
   "info": {
     "faq": {
