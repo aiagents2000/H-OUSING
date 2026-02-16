@@ -11,14 +11,9 @@ import {
   User,
   DoorOpen,
   ClipboardList,
-  HelpCircle,
-  FileText,
-  Phone,
   BarChart3,
-  ChevronDown,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
 
 interface SidebarProps {
   role: "student" | "staff";
@@ -28,7 +23,6 @@ export function Sidebar({ role }: SidebarProps) {
   const pathname = usePathname();
   const t = useTranslations("nav");
   const stats = useQuery(api.maintenanceRequests.getRequestStats);
-  const [infoOpen, setInfoOpen] = useState(false);
 
   const studentNav = [
     { href: "/dashboard", label: t("dashboard"), icon: LayoutDashboard },
@@ -40,12 +34,6 @@ export function Sidebar({ role }: SidebarProps) {
       icon: ClipboardList,
       badge: stats && "active" in stats ? stats.active : undefined,
     },
-  ];
-
-  const studentInfoNav = [
-    { href: "/info/faq", label: t("faq"), icon: HelpCircle },
-    { href: "/info/rules", label: t("rules"), icon: FileText },
-    { href: "/info/contacts", label: t("contacts"), icon: Phone },
   ];
 
   const staffNav = [
@@ -91,48 +79,6 @@ export function Sidebar({ role }: SidebarProps) {
           </Link>
         );
       })}
-
-      {role === "student" && (
-        <div>
-          <button
-            onClick={() => setInfoOpen(!infoOpen)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium w-full text-foreground hover:bg-accent transition-all duration-150 touch-target"
-          >
-            <HelpCircle className="h-5 w-5 shrink-0" />
-            <span className="flex-1 text-left">{t("info")}</span>
-            <ChevronDown
-              className={cn(
-                "h-4 w-4 transition-transform duration-200",
-                infoOpen && "rotate-180"
-              )}
-            />
-          </button>
-          {infoOpen && (
-            <div className="ml-4 mt-1 space-y-1">
-              {studentInfoNav.map((item) => {
-                const Icon = item.icon;
-                const isActive = pathname === item.href;
-
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150",
-                      isActive
-                        ? "bg-primary text-white"
-                        : "text-muted-foreground hover:bg-accent hover:text-foreground"
-                    )}
-                  >
-                    <Icon className="h-4 w-4 shrink-0" />
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
     </nav>
   );
 }

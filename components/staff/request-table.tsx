@@ -132,59 +132,74 @@ export function RequestTable() {
           <Filter className="h-4 w-4" />
           {t("common.filters")}
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-          <div className="relative col-span-2 sm:col-span-3 lg:col-span-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder={t("common.search")}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-9"
-            />
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-2 gap-y-3">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-1 space-y-1">
+            <label className="text-xs font-medium text-muted-foreground">{t("common.search")}</label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder={t("common.search")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 h-9"
+              />
+            </div>
           </div>
-          <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as RequestStatus | "all")}>
-            <SelectTrigger className="h-9">
-              <SelectValue placeholder={t("common.status")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("common.all")}</SelectItem>
-              {(Object.keys(REQUEST_STATUSES) as RequestStatus[]).map((s) => (
-                <SelectItem key={s} value={s}>{t(`statuses.${s}`)}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={categoryFilter} onValueChange={(v) => setCategoryFilter(v as RequestCategory | "all")}>
-            <SelectTrigger className="h-9">
-              <SelectValue placeholder={t("common.category")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("common.all")}</SelectItem>
-              {(Object.keys(REQUEST_CATEGORIES) as RequestCategory[]).map((c) => (
-                <SelectItem key={c} value={c}>{t(`categories.${c}`)}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={priorityFilter} onValueChange={(v) => setPriorityFilter(v as RequestPriority | "all")}>
-            <SelectTrigger className="h-9">
-              <SelectValue placeholder={t("common.priority")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("common.all")}</SelectItem>
-              {(Object.keys(REQUEST_PRIORITIES) as RequestPriority[]).map((p) => (
-                <SelectItem key={p} value={p}>{t(`priorities.${p}`)}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={buildingFilter} onValueChange={(v) => setBuildingFilter(v as "A" | "B" | "all")}>
-            <SelectTrigger className="h-9">
-              <SelectValue placeholder={t("common.building")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("common.all")}</SelectItem>
-              <SelectItem value="A">{t("common.building")} A</SelectItem>
-              <SelectItem value="B">{t("common.building")} B</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-muted-foreground">{t("common.status")}</label>
+            <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as RequestStatus | "all")}>
+              <SelectTrigger className="h-9">
+                <SelectValue placeholder={t("common.status")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("common.all")}</SelectItem>
+                {(Object.keys(REQUEST_STATUSES) as RequestStatus[]).map((s) => (
+                  <SelectItem key={s} value={s}>{t(`statuses.${s}`)}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-muted-foreground">{t("common.category")}</label>
+            <Select value={categoryFilter} onValueChange={(v) => setCategoryFilter(v as RequestCategory | "all")}>
+              <SelectTrigger className="h-9">
+                <SelectValue placeholder={t("common.category")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("common.all")}</SelectItem>
+                {(Object.keys(REQUEST_CATEGORIES) as RequestCategory[]).map((c) => (
+                  <SelectItem key={c} value={c}>{t(`categories.${c}`)}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-muted-foreground">{t("common.priority")}</label>
+            <Select value={priorityFilter} onValueChange={(v) => setPriorityFilter(v as RequestPriority | "all")}>
+              <SelectTrigger className="h-9">
+                <SelectValue placeholder={t("common.priority")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("common.all")}</SelectItem>
+                {(Object.keys(REQUEST_PRIORITIES) as RequestPriority[]).map((p) => (
+                  <SelectItem key={p} value={p}>{t(`priorities.${p}`)}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-muted-foreground">{t("common.building")}</label>
+            <Select value={buildingFilter} onValueChange={(v) => setBuildingFilter(v as "A" | "B" | "all")}>
+              <SelectTrigger className="h-9">
+                <SelectValue placeholder={t("common.building")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("common.all")}</SelectItem>
+                <SelectItem value="A">{t("common.building")} A</SelectItem>
+                <SelectItem value="B">{t("common.building")} B</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Active filter chips */}
