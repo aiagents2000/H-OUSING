@@ -3,6 +3,7 @@
     "dashboard": "Dashboard",
     "profile": "Profilo",
     "myRoom": "La Mia Stanza",
+    "marinaServices": "Servizi",
     "requests": "Richieste",
     "newRequest": "Nuova Richiesta",
     "info": "Informazioni",
@@ -153,6 +154,14 @@
     "noRoommates": "Nessun coinquilino registrato",
     "activeRequests": "Richieste Attive",
     "noActiveRequests": "Nessuna richiesta attiva per questa stanza"
+  },
+  "marina": {
+    "title": "Servizi Marina",
+    "subtitle": "Prenota attività ed esplora il marketplace",
+    "bookServices": "Prenota Servizi",
+    "bookServicesDesc": "Prenota esperienze, corsi e attività alla Marina",
+    "marketplace": "Marketplace",
+    "marketplaceDesc": "Compra e vendi barche nel marketplace della Marina"
   },
   "analytics": {
     "title": "Analisi",

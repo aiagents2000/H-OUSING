@@ -1,155 +1,74 @@
 "use client";
 
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import { useTranslations } from "next-intl";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PageLoader } from "@/components/shared/loading-states";
-import { RequestCard } from "@/components/student/request-card";
-import { RequestDetailModal } from "@/components/student/request-detail-modal";
-import { DoorOpen, Users, ClipboardList } from "lucide-react";
-import { REQUEST_STATUSES } from "@/lib/constants";
-import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Anchor, ShoppingBag, ExternalLink } from "lucide-react";
 
-export default function RoomPage() {
-  const t = useTranslations("room");
-  const tc = useTranslations();
-  const currentUser = useQuery(api.users.getCurrentUser);
+export default function MarinaServicesPage() {
+  const t = useTranslations("marina");
 
-  const roommates = useQuery(
-    api.rooms.getRoommates,
-    currentUser?.roomNumber && currentUser?.building
-      ? {
-          roomNumber: currentUser.roomNumber,
-          building: currentUser.building as "A" | "B",
-        }
-      : "skip"
-  );
-
-  const roomRequests = useQuery(
-    api.maintenanceRequests.getRequestsByRoom,
-    currentUser?.roomNumber && currentUser?.building
-      ? {
-          roomNumber: currentUser.roomNumber,
-          building: currentUser.building as "A" | "B",
-        }
-      : "skip"
-  );
-
-  const [selectedRequest, setSelectedRequest] = useState<NonNullable<typeof roomRequests>[number] | null>(null);
-
-  if (!currentUser) return <PageLoader />;
-
-  const activeRequests = roomRequests?.filter(
-    (r) => r.status === "open" || r.status === "in_progress"
-  ) || [];
-
-  const otherRoommates = roommates?.filter(
-    (r) => r && r._id !== currentUser._id
-  ) || [];
+  const services = [
+    {
+      icon: Anchor,
+      title: t("bookServices"),
+      description: t("bookServicesDesc"),
+      url: "https://www.holidoit.com/embed/web/937c14a4-eddc-4a12-8d16-e67ec4c199f7?with_script=true&language_selector=true&holidoit_logo=true&partner_logo=true",
+      color: "#007AFF",
+    },
+    {
+      icon: ShoppingBag,
+      title: t("marketplace"),
+      description: t("marketplaceDesc"),
+      url: "https://marina-marketplace.emergent.host/",
+      color: "#5856D6",
+    },
+  ];
 
   return (
-    <div className="space-y-6 max-w-2xl mx-auto">
-      <div className="flex items-center gap-3">
-        <DoorOpen className="h-6 w-6 text-primary" />
+    <div className="max-w-2xl mx-auto">
+      <div className="flex items-center gap-3 mb-2">
+        <Anchor className="h-6 w-6 text-primary" />
         <h1 className="text-2xl font-bold">{t("title")}</h1>
       </div>
+      <p className="text-sm text-muted-foreground mb-6">{t("subtitle")}</p>
 
-      <Card className="ios-card">
-        <CardContent className="p-6">
-          <div className="flex items-center gap-4">
-            <div className="h-16 w-16 rounded-2xl bg-primary/10 flex items-center justify-center">
-              <span className="text-2xl font-bold text-primary">
-                {currentUser.roomNumber}
-              </span>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold">
-                {tc("common.room")} {currentUser.roomNumber}
-              </h2>
-              <Badge variant="secondary" className="mt-1">
-                {tc("common.building")} {currentUser.building}
-              </Badge>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Roommates */}
-      <Card className="ios-card">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            {t("roommates")}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {otherRoommates.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-2">
-              {t("noRoommates")}
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {otherRoommates.map((mate) =>
-                mate ? (
-                  <div key={mate._id} className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={mate.photoUrl} />
-                      <AvatarFallback className="bg-secondary/10 text-secondary text-sm">
-                        {mate.fullName
-                          ?.split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium">{mate.fullName}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {mate.courseOfStudy}
+      <div className="space-y-4">
+        {services.map((service, i) => {
+          const Icon = service.icon;
+          return (
+            <a
+              key={i}
+              href={service.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+            >
+              <Card className="ios-card active:scale-[0.98] transition-transform cursor-pointer">
+                <CardContent className="p-4 sm:p-5">
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="h-14 w-14 rounded-2xl flex items-center justify-center shrink-0"
+                      style={{ backgroundColor: `${service.color}12` }}
+                    >
+                      <Icon
+                        className="h-7 w-7"
+                        style={{ color: service.color }}
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h2 className="font-semibold text-base">{service.title}</h2>
+                      <p className="text-sm text-muted-foreground mt-0.5">
+                        {service.description}
                       </p>
                     </div>
+                    <ExternalLink className="h-5 w-5 text-muted-foreground shrink-0" />
                   </div>
-                ) : null
-              )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Active Requests */}
-      <Card className="ios-card">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base flex items-center gap-2">
-            <ClipboardList className="h-4 w-4" />
-            {t("activeRequests")}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {activeRequests.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-2">
-              {t("noActiveRequests")}
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {activeRequests.map((req) => (
-                <RequestCard
-                  key={req._id}
-                  request={req}
-                  onClick={() => setSelectedRequest(req)}
-                />
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      <RequestDetailModal
-        request={selectedRequest as never}
-        open={!!selectedRequest}
-        onClose={() => setSelectedRequest(null)}
-      />
+                </CardContent>
+              </Card>
+            </a>
+          );
+        })}
+      </div>
     </div>
   );
 }

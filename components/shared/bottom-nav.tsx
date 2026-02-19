@@ -4,13 +4,11 @@ import { useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import {
   LayoutDashboard,
   ClipboardList,
   UnlockKeyhole,
-  DoorOpen,
+  Anchor,
   User,
   Check,
   Loader2,
@@ -22,7 +20,6 @@ export function BottomNav() {
   const pathname = usePathname();
   const t = useTranslations("nav");
   const td = useTranslations("door");
-  const currentUser = useQuery(api.users.getCurrentUser);
   const [doorState, setDoorState] = useState<"idle" | "opening" | "opened">("idle");
 
   const handleDoorOpen = useCallback(() => {
@@ -41,7 +38,7 @@ export function BottomNav() {
     { href: "/dashboard", label: t("dashboard"), icon: LayoutDashboard },
     { href: "/requests", label: t("requests"), icon: ClipboardList },
     { href: "#door", label: td("openDoor"), icon: UnlockKeyhole, isDoor: true },
-    { href: "/room", label: t("myRoom"), icon: DoorOpen },
+    { href: "/room", label: t("marinaServices"), icon: Anchor },
     { href: "/profile", label: t("profile"), icon: User },
   ];
 

@@ -3,6 +3,7 @@
     "dashboard": "Dashboard",
     "profile": "Profile",
     "myRoom": "My Room",
+    "marinaServices": "Services",
     "requests": "Requests",
     "newRequest": "New Request",
     "info": "Info",
@@ -153,6 +154,14 @@
     "noRoommates": "No roommates registered",
     "activeRequests": "Active Requests",
     "noActiveRequests": "No active requests for this room"
+  },
+  "marina": {
+    "title": "Marina Services",
+    "subtitle": "Book activities and explore the marketplace",
+    "bookServices": "Book Services",
+    "bookServicesDesc": "Book experiences, courses, and activities at the Marina",
+    "marketplace": "Marketplace",
+    "marketplaceDesc": "Buy and sell boats at the Marina marketplace"
   },
   "analytics": {
     "title": "Analytics",

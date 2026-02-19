@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   User,
-  DoorOpen,
+  Anchor,
   ClipboardList,
   BarChart3,
 } from "lucide-react";
@@ -27,7 +27,7 @@ export function Sidebar({ role }: SidebarProps) {
   const studentNav = [
     { href: "/dashboard", label: t("dashboard"), icon: LayoutDashboard },
     { href: "/profile", label: t("profile"), icon: User },
-    { href: "/room", label: t("myRoom"), icon: DoorOpen },
+    { href: "/room", label: t("marinaServices"), icon: Anchor },
     {
       href: "/requests",
       label: t("requests"),
