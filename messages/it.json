@@ -10,6 +10,7 @@
     "rules": "Regolamento",
     "contacts": "Contatti Emergenza",
     "analytics": "Analisi",
+    "announcements": "Comunicazioni",
     "logout": "Esci",
     "language": "Lingua"
   },
@@ -130,6 +131,7 @@
     "plumbing": "Idraulico",
     "electrical": "Elettrico",
     "cleaning": "Pulizia",
+    "boiler": "Caldaia",
     "other": "Altro"
   },
   "priorities": {
@@ -137,6 +139,24 @@
     "medium": "Media",
     "high": "Alta",
     "urgent": "Urgente"
+  },
+  "announcements": {
+    "title": "Comunicazioni",
+    "new": "Nuova Comunicazione",
+    "create": "Crea Comunicazione",
+    "titleLabel": "Titolo",
+    "titlePlaceholder": "Titolo della comunicazione...",
+    "messagePlaceholder": "Scrivi la tua comunicazione...",
+    "messageMinLength": "Il messaggio deve avere almeno 10 caratteri",
+    "important": "Importante",
+    "normal": "Normale",
+    "priorityLabel": "Priorità",
+    "sending": "Invio in corso...",
+    "sent": "Comunicazione inviata con successo!",
+    "noAnnouncements": "Nessuna comunicazione al momento",
+    "delete": "Elimina comunicazione",
+    "deleteConfirm": "Sei sicuro di voler eliminare questa comunicazione?",
+    "deleted": "Comunicazione eliminata"
   },
   "errors": {
     "generic": "Si è verificato un errore",

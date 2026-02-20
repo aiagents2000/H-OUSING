@@ -110,7 +110,7 @@ export function RequestForm() {
       }
 
       await createRequest({
-        category: form.category as "plumbing" | "electrical" | "cleaning" | "other",
+        category: form.category as "plumbing" | "electrical" | "cleaning" | "boiler" | "other",
         priority: form.priority as "low" | "medium" | "high" | "urgent",
         description: form.description,
         photoStorageId,

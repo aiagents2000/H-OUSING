@@ -36,6 +36,7 @@ export default defineSchema({
       v.literal("plumbing"),
       v.literal("electrical"),
       v.literal("cleaning"),
+      v.literal("boiler"),
       v.literal("other")
     ),
     priority: v.union(
@@ -63,6 +64,15 @@ export default defineSchema({
     .index("by_building", ["building"])
     .index("by_created", ["createdAt"])
     .index("by_status_and_building", ["status", "building"]),
+
+  announcements: defineTable({
+    authorId: v.id("users"),
+    title: v.string(),
+    message: v.string(),
+    priority: v.union(v.literal("normal"), v.literal("important")),
+    createdAt: v.number(),
+  })
+    .index("by_created", ["createdAt"]),
 
   notifications: defineTable({
     userId: v.id("users"),

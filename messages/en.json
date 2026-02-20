@@ -10,6 +10,7 @@
     "rules": "Rules",
     "contacts": "Emergency Contacts",
     "analytics": "Analytics",
+    "announcements": "Announcements",
     "logout": "Logout",
     "language": "Language"
   },
@@ -130,6 +131,7 @@
     "plumbing": "Plumbing",
     "electrical": "Electrical",
     "cleaning": "Cleaning",
+    "boiler": "Boiler",
     "other": "Other"
   },
   "priorities": {
@@ -137,6 +139,24 @@
     "medium": "Medium",
     "high": "High",
     "urgent": "Urgent"
+  },
+  "announcements": {
+    "title": "Announcements",
+    "new": "New Announcement",
+    "create": "Create Announcement",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Announcement title...",
+    "messagePlaceholder": "Write your announcement...",
+    "messageMinLength": "Message must be at least 10 characters",
+    "important": "Important",
+    "normal": "Normal",
+    "priorityLabel": "Priority",
+    "sending": "Sending...",
+    "sent": "Announcement sent successfully!",
+    "noAnnouncements": "No announcements at the moment",
+    "delete": "Delete announcement",
+    "deleteConfirm": "Are you sure you want to delete this announcement?",
+    "deleted": "Announcement deleted"
   },
   "errors": {
     "generic": "An error occurred",

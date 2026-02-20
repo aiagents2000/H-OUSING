@@ -1,4 +1,4 @@
-import { Droplet, Zap, Sparkles, MoreHorizontal, type LucideIcon } from "lucide-react";
+import { Droplet, Zap, Sparkles, Flame, MoreHorizontal, type LucideIcon } from "lucide-react";
 
 export const BUILDINGS = ["A", "B"] as const;
 export type Building = (typeof BUILDINGS)[number];
@@ -17,6 +17,7 @@ export const REQUEST_CATEGORIES = {
   plumbing: { icon: Droplet, color: "#007AFF", bgColor: "#007AFF15" },
   electrical: { icon: Zap, color: "#FF9500", bgColor: "#FF950015" },
   cleaning: { icon: Sparkles, color: "#34C759", bgColor: "#34C75915" },
+  boiler: { icon: Flame, color: "#FF3B30", bgColor: "#FF3B3015" },
   other: { icon: MoreHorizontal, color: "#8E8E93", bgColor: "#8E8E9315" },
 } as const;
 

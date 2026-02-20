@@ -7,6 +7,7 @@ export const createRequest = mutation({
       v.literal("plumbing"),
       v.literal("electrical"),
       v.literal("cleaning"),
+      v.literal("boiler"),
       v.literal("other")
     ),
     priority: v.union(
@@ -118,6 +119,7 @@ export const getAllRequests = query({
         v.literal("plumbing"),
         v.literal("electrical"),
         v.literal("cleaning"),
+        v.literal("boiler"),
         v.literal("other")
       )
     ),
@@ -350,6 +352,7 @@ export const getAnalyticsData = query({
         v.literal("plumbing"),
         v.literal("electrical"),
         v.literal("cleaning"),
+        v.literal("boiler"),
         v.literal("other")
       )
     ),
@@ -379,6 +382,7 @@ export const getAnalyticsData = query({
       plumbing: requests.filter((r) => r.category === "plumbing").length,
       electrical: requests.filter((r) => r.category === "electrical").length,
       cleaning: requests.filter((r) => r.category === "cleaning").length,
+      boiler: requests.filter((r) => r.category === "boiler").length,
       other: requests.filter((r) => r.category === "other").length,
     };
 

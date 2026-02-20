@@ -13,24 +13,37 @@ import {
   UnlockKeyhole,
   Check,
   Loader2,
+  Megaphone,
+  AlertTriangle,
 } from "lucide-react";
 import { StatCard } from "@/components/student/dashboard-stats";
 import { RequestCard } from "@/components/student/request-card";
 import { RequestDetailModal } from "@/components/student/request-detail-modal";
 import { CardSkeleton } from "@/components/shared/loading-states";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { formatDistanceToNow } from "date-fns";
+import { it, enUS } from "date-fns/locale";
+import { useAppLocale } from "@/lib/i18n";
 import { useDoorOpen } from "@/hooks/use-door-open";
 
 export default function StudentDashboard() {
   const t = useTranslations("dashboard");
   const tc = useTranslations("common");
   const td = useTranslations("door");
+  const ta = useTranslations("announcements");
+  const { locale } = useAppLocale();
+  const dateLocale = locale === "it" ? it : enUS;
   const currentUser = useQuery(api.users.getCurrentUser);
   const stats = useQuery(api.maintenanceRequests.getRequestStats);
   const requests = useQuery(api.maintenanceRequests.getRequestsByStudent, {});
+  const announcements = useQuery(api.announcements.list);
   const [selectedRequest, setSelectedRequest] = useState<(typeof recentRequests)[number] | null>(null);
   const { doorState, handleDoorOpen } = useDoorOpen();
+
+  const recentAnnouncements = announcements?.slice(0, 3) || [];
 
   const recentRequests = requests?.slice(0, 3) || [];
 
@@ -96,6 +109,43 @@ export default function StudentDashboard() {
           </p>
         </div>
       </button>
+
+      {/* Announcements */}
+      {recentAnnouncements.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <Megaphone className="h-4 w-4 text-primary" />
+            <h2 className="text-sm font-semibold">{ta("title")}</h2>
+          </div>
+          {recentAnnouncements.map((a) => (
+            <Card
+              key={a._id}
+              className={`ios-card ${a.priority === "important" ? "border-destructive/30" : ""}`}
+            >
+              <CardContent className="p-3">
+                <div className="flex items-start gap-2">
+                  {a.priority === "important" && (
+                    <AlertTriangle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium">{a.title}</p>
+                    <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
+                      {a.message}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {a.authorName} &middot;{" "}
+                      {formatDistanceToNow(new Date(a.createdAt), {
+                        addSuffix: true,
+                        locale: dateLocale,
+                      })}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard

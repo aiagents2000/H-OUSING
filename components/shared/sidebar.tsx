@@ -12,6 +12,7 @@ import {
   Anchor,
   ClipboardList,
   BarChart3,
+  Megaphone,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -44,6 +45,7 @@ export function Sidebar({ role }: SidebarProps) {
       icon: ClipboardList,
       badge: stats && "open" in stats ? stats.open : undefined,
     },
+    { href: "/staff/announcements", label: t("announcements"), icon: Megaphone },
     { href: "/staff/analytics", label: t("analytics"), icon: BarChart3 },
   ];
 

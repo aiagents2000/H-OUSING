@@ -55,7 +55,7 @@ export function AnalyticsCharts() {
 
   const data = useQuery(api.maintenanceRequests.getAnalyticsData, {
     building: buildingFilter === "all" ? undefined : buildingFilter,
-    category: categoryFilter === "all" ? undefined : (categoryFilter as "plumbing" | "electrical" | "cleaning" | "other"),
+    category: categoryFilter === "all" ? undefined : (categoryFilter as "plumbing" | "electrical" | "cleaning" | "boiler" | "other"),
   });
 
   if (!data) {
