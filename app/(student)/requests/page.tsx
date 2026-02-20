@@ -123,7 +123,7 @@ export default function RequestsPage() {
       {/* FAB mobile - positioned above bottom nav */}
       <Link
         href="/requests/new"
-        className="fixed bottom-24 right-4 sm:hidden h-14 w-14 bg-green-500 text-white rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform z-40"
+        className="fixed bottom-32 right-4 sm:hidden h-14 w-14 bg-green-500 text-white rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform z-40"
         aria-label="New request"
       >
         <Plus className="h-6 w-6" />

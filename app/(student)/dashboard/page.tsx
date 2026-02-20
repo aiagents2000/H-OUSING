@@ -110,7 +110,39 @@ export default function StudentDashboard() {
         </div>
       </button>
 
-      {/* Announcements */}
+      {/* Stats grid - 2x2 square cards on mobile, 4-col on desktop */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {/* Row 1: Announcements + Your Room */}
+        <StatCard
+          icon={Megaphone}
+          label={ta("title")}
+          value={recentAnnouncements.length}
+          sublabel={recentAnnouncements[0]?.title}
+          color="#FF9500"
+        />
+        <StatCard
+          icon={DoorOpen}
+          label={t("yourRoom")}
+          value={`${currentUser.roomNumber || "-"}`}
+          sublabel={currentUser.building ? `${tc("building")} ${currentUser.building}` : undefined}
+          color="#5856D6"
+        />
+        {/* Row 2: Active Requests + Total Requests */}
+        <StatCard
+          icon={ClipboardList}
+          label={t("activeRequests")}
+          value={stats && "active" in stats ? stats.active ?? 0 : 0}
+          color="#007AFF"
+        />
+        <StatCard
+          icon={FileText}
+          label={t("totalRequests")}
+          value={stats && "total" in stats ? stats.total ?? 0 : 0}
+          color="#34C759"
+        />
+      </div>
+
+      {/* Announcements detail (when there are announcements) */}
       {recentAnnouncements.length > 0 && (
         <div className="space-y-2">
           <div className="flex items-center gap-2">
@@ -146,28 +178,6 @@ export default function StudentDashboard() {
           ))}
         </div>
       )}
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatCard
-          icon={ClipboardList}
-          label={t("activeRequests")}
-          value={stats && "active" in stats ? stats.active ?? 0 : 0}
-          color="#007AFF"
-        />
-        <StatCard
-          icon={DoorOpen}
-          label={t("yourRoom")}
-          value={`${currentUser.roomNumber || "-"}`}
-          sublabel={currentUser.building ? `${tc("building")} ${currentUser.building}` : undefined}
-          color="#5856D6"
-        />
-        <StatCard
-          icon={FileText}
-          label={t("totalRequests")}
-          value={stats && "total" in stats ? stats.total ?? 0 : 0}
-          color="#34C759"
-        />
-      </div>
 
       <div>
         <div className="flex items-center justify-between mb-4">
@@ -210,7 +220,7 @@ export default function StudentDashboard() {
       {/* Floating Action Button - mobile, positioned above bottom nav */}
       <Link
         href="/requests/new"
-        className="fixed bottom-24 right-4 lg:bottom-6 lg:right-6 lg:hidden h-14 w-14 bg-green-500 text-white rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform z-40"
+        className="fixed bottom-32 right-4 lg:bottom-6 lg:right-6 lg:hidden h-14 w-14 bg-green-500 text-white rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform z-40"
         aria-label="New request"
       >
         <Plus className="h-6 w-6" />

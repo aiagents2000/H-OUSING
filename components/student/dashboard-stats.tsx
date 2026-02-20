@@ -14,8 +14,9 @@ interface StatCardProps {
 export function StatCard({ icon: Icon, label, value, sublabel, color = "#007AFF" }: StatCardProps) {
   return (
     <Card className="ios-card">
-      <CardContent className="p-4">
-        <div className="flex items-center gap-3">
+      {/* Mobile: square, vertical centered layout */}
+      <CardContent className="p-4 sm:p-4">
+        <div className="flex flex-col items-center justify-center text-center gap-2 aspect-square sm:aspect-auto sm:flex-row sm:text-left sm:items-center sm:gap-3">
           <div
             className="h-10 w-10 rounded-xl flex items-center justify-center shrink-0"
             style={{ backgroundColor: `${color}15` }}
