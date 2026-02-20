@@ -2,7 +2,6 @@
   "nav": {
     "dashboard": "Dashboard",
     "profile": "Profile",
-    "myRoom": "My Room",
     "marinaServices": "Services",
     "requests": "Requests",
     "newRequest": "New Request",
@@ -45,7 +44,11 @@
     "noNotifications": "No notifications",
     "clearAll": "Clear all",
     "activeFilters": "Active filters",
-    "resultsCount": "{count} results"
+    "resultsCount": "{count} results",
+    "page": "Page",
+    "of": "of",
+    "previous": "Previous",
+    "next": "Next"
   },
   "auth": {
     "signIn": "Sign In",
@@ -107,6 +110,7 @@
     "autoFilledRoom": "Room and building auto-filled from your profile",
     "noRequests": "No requests found",
     "noRequestsDesc": "Your maintenance requests will appear here",
+    "createdDesc": "You'll receive notifications when the status changes",
     "statusTimeline": "Status Timeline",
     "rejectionReason": "Rejection Reason",
     "changeStatus": "Change Status",
@@ -134,6 +138,15 @@
     "high": "High",
     "urgent": "Urgent"
   },
+  "errors": {
+    "generic": "An error occurred",
+    "imageInvalidType": "Only JPEG, PNG, and WebP images are allowed",
+    "imageTooLarge": "Image must be less than 5MB",
+    "imageProcessing": "Failed to process image",
+    "createRequest": "Failed to create request",
+    "updateStatus": "Failed to update status",
+    "requestNotFound": "Request not found"
+  },
   "profile": {
     "title": "My Profile",
     "fullName": "Full Name",
@@ -144,12 +157,9 @@
     "building": "Building",
     "memberSince": "Member Since",
     "role": "Role",
-    "infoHelp": "Info & Help",
-    "infoHelpDesc": "FAQ, rules, and emergency contacts"
+    "infoHelp": "Info & Help"
   },
   "room": {
-    "title": "My Room",
-    "roomInfo": "Room Info",
     "roommates": "Roommates",
     "noRoommates": "No roommates registered",
     "activeRequests": "Active Requests",

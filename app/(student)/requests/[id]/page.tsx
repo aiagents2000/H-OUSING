@@ -48,7 +48,7 @@ export default function RequestDetailPage() {
   if (!request) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Request not found</p>
+        <p className="text-muted-foreground">{t("errors.requestNotFound")}</p>
         <Button variant="outline" onClick={() => router.back()} className="mt-4">
           <ArrowLeft className="h-4 w-4 mr-2" /> {t("common.back")}
         </Button>

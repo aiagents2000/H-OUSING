@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useTranslations } from "next-intl";
@@ -16,16 +18,30 @@ import { useAppLocale } from "@/lib/i18n";
 
 export function NotificationBell() {
   const t = useTranslations("common");
+  const router = useRouter();
   const { locale } = useAppLocale();
+  const [open, setOpen] = useState(false);
+  const currentUser = useQuery(api.users.getCurrentUser);
   const unreadCount = useQuery(api.notifications.getUnreadCount);
   const notifications = useQuery(api.notifications.getNotificationsByUser);
   const markAsRead = useMutation(api.notifications.markAsRead);
   const markAllAsRead = useMutation(api.notifications.markAllAsRead);
 
   const dateLocale = locale === "it" ? it : enUS;
+  const isStaff = currentUser?.role === "staff";
+
+  const handleNotificationClick = (n: NonNullable<typeof notifications>[number]) => {
+    if (!n.read) markAsRead({ notificationId: n._id });
+    setOpen(false);
+    if (isStaff) {
+      router.push("/staff/requests");
+    } else {
+      router.push(`/requests/${n.requestId}`);
+    }
+  };
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
@@ -65,9 +81,7 @@ export function NotificationBell() {
             notifications.map((n) => (
               <button
                 key={n._id}
-                onClick={() => {
-                  if (!n.read) markAsRead({ notificationId: n._id });
-                }}
+                onClick={() => handleNotificationClick(n)}
                 className={`w-full text-left p-3 border-b last:border-0 hover:bg-accent/50 transition-colors ${
                   !n.read ? "bg-primary/5" : ""
                 }`}

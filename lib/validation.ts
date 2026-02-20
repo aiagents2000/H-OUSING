@@ -6,15 +6,15 @@ export function validateRequired(value: string): boolean {
   return value.trim().length > 0;
 }
 
-export function validateImageFile(file: File): { valid: boolean; error?: string } {
+export function validateImageFile(file: File): { valid: boolean; errorCode?: "invalid_type" | "too_large" } {
   const maxSize = 5 * 1024 * 1024;
-  const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
   if (!allowedTypes.includes(file.type)) {
-    return { valid: false, error: "Only JPEG, PNG, and WebP images are allowed" };
+    return { valid: false, errorCode: "invalid_type" };
   }
   if (file.size > maxSize) {
-    return { valid: false, error: "Image must be less than 5MB" };
+    return { valid: false, errorCode: "too_large" };
   }
   return { valid: true };
 }

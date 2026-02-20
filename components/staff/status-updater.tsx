@@ -61,7 +61,7 @@ export function StatusUpdater({
       onUpdated?.();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to update status");
+      toast.error(t("errors.updateStatus"));
     } finally {
       setLoading(false);
     }

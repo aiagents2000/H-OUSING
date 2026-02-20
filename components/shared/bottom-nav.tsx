@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -14,25 +13,13 @@ import {
   Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import { useDoorOpen } from "@/hooks/use-door-open";
 
 export function BottomNav() {
   const pathname = usePathname();
   const t = useTranslations("nav");
   const td = useTranslations("door");
-  const [doorState, setDoorState] = useState<"idle" | "opening" | "opened">("idle");
-
-  const handleDoorOpen = useCallback(() => {
-    if (doorState !== "idle") return;
-    setDoorState("opening");
-
-    // TODO: Connect to control room API
-    setTimeout(() => {
-      setDoorState("opened");
-      toast.success(td("opened"), { description: td("openedDesc") });
-      setTimeout(() => setDoorState("idle"), 3000);
-    }, 1500);
-  }, [doorState, td]);
+  const { doorState, handleDoorOpen } = useDoorOpen();
 
   const navItems = [
     { href: "/dashboard", label: t("dashboard"), icon: LayoutDashboard },
@@ -53,30 +40,35 @@ export function BottomNav() {
               UnlockKeyhole;
 
             return (
-              <button
-                key="door"
-                onClick={handleDoorOpen}
-                disabled={doorState !== "idle"}
-                className={cn(
-                  "flex flex-col items-center justify-center -mt-4 relative",
-                  "w-14 h-14 rounded-full shadow-lg transition-all duration-200 active:scale-95",
-                  doorState === "opened"
-                    ? "bg-green-500"
-                    : "bg-primary",
-                )}
-              >
-                <DoorIcon
+              <div key="door" className="flex flex-col items-center min-w-[56px]">
+                <button
+                  onClick={handleDoorOpen}
+                  disabled={doorState !== "idle"}
                   className={cn(
-                    "h-6 w-6 text-white",
-                    doorState === "opening" && "animate-spin"
+                    "flex items-center justify-center -mt-4",
+                    "w-14 h-14 rounded-full shadow-lg transition-all duration-200 active:scale-95",
+                    doorState === "opened"
+                      ? "bg-green-500"
+                      : "bg-primary",
                   )}
-                />
-              </button>
+                >
+                  <DoorIcon
+                    className={cn(
+                      "h-6 w-6 text-white",
+                      doorState === "opening" && "animate-spin"
+                    )}
+                  />
+                </button>
+                <span className="text-[10px] mt-0.5 leading-tight font-medium text-muted-foreground">
+                  {item.label}
+                </span>
+              </div>
             );
           }
 
           const Icon = item.icon;
           const isActive = pathname === item.href ||
+            (item.href !== "/dashboard" && pathname.startsWith(item.href + "/")) ||
             (item.href === "/requests" && pathname.startsWith("/requests"));
 
           return (

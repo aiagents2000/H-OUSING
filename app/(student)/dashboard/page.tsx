@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useTranslations } from "next-intl";
@@ -17,10 +17,10 @@ import {
 import { StatCard } from "@/components/student/dashboard-stats";
 import { RequestCard } from "@/components/student/request-card";
 import { RequestDetailModal } from "@/components/student/request-detail-modal";
-import { CardSkeleton, RequestCardSkeleton } from "@/components/shared/loading-states";
+import { CardSkeleton } from "@/components/shared/loading-states";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import { useDoorOpen } from "@/hooks/use-door-open";
 
 export default function StudentDashboard() {
   const t = useTranslations("dashboard");
@@ -30,21 +30,9 @@ export default function StudentDashboard() {
   const stats = useQuery(api.maintenanceRequests.getRequestStats);
   const requests = useQuery(api.maintenanceRequests.getRequestsByStudent, {});
   const [selectedRequest, setSelectedRequest] = useState<(typeof recentRequests)[number] | null>(null);
-  const [doorState, setDoorState] = useState<"idle" | "opening" | "opened">("idle");
+  const { doorState, handleDoorOpen } = useDoorOpen();
 
   const recentRequests = requests?.slice(0, 3) || [];
-
-  const handleDoorOpen = useCallback(() => {
-    if (doorState !== "idle") return;
-    setDoorState("opening");
-
-    // TODO: Connect to control room API
-    setTimeout(() => {
-      setDoorState("opened");
-      toast.success(td("opened"), { description: td("openedDesc") });
-      setTimeout(() => setDoorState("idle"), 3000);
-    }, 1500);
-  }, [doorState, td]);
 
   if (!currentUser || stats === undefined) {
     return (

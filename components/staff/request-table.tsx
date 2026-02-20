@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useTranslations } from "next-intl";
@@ -35,6 +35,7 @@ import {
   REQUEST_CATEGORIES,
   REQUEST_STATUSES,
   REQUEST_PRIORITIES,
+  ITEMS_PER_PAGE,
   type RequestStatus,
   type RequestCategory,
   type RequestPriority,
@@ -42,8 +43,11 @@ import {
 import { formatDistanceToNow, format } from "date-fns";
 import { it, enUS } from "date-fns/locale";
 import { useAppLocale } from "@/lib/i18n";
-import { Search, Eye, Mail, X, Filter } from "lucide-react";
+import { Search, Eye, Mail, X, Filter, ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { Id } from "@/convex/_generated/dataModel";
+
+type SortField = "createdAt" | "priority" | "status";
+type SortOrder = "asc" | "desc";
 
 export function RequestTable() {
   const t = useTranslations();
@@ -56,14 +60,30 @@ export function RequestTable() {
   const [buildingFilter, setBuildingFilter] = useState<"A" | "B" | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRequestId, setSelectedRequestId] = useState<Id<"maintenanceRequests"> | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [sortBy, setSortBy] = useState<SortField>("createdAt");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
-  const requests = useQuery(api.maintenanceRequests.getAllRequests, {
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [statusFilter, categoryFilter, priorityFilter, buildingFilter, searchQuery, sortBy, sortOrder]);
+
+  const result = useQuery(api.maintenanceRequests.getAllRequests, {
     status: statusFilter === "all" ? undefined : statusFilter,
     category: categoryFilter === "all" ? undefined : categoryFilter,
     priority: priorityFilter === "all" ? undefined : priorityFilter,
     building: buildingFilter === "all" ? undefined : buildingFilter,
     searchQuery: searchQuery || undefined,
+    page: currentPage,
+    pageSize: ITEMS_PER_PAGE,
+    sortBy,
+    sortOrder,
   });
+
+  const requests = result?.data;
+  const totalCount = result?.totalCount ?? 0;
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   const selectedRequest = useQuery(
     api.maintenanceRequests.getRequestById,
@@ -76,6 +96,33 @@ export function RequestTable() {
       ? { storageId: selectedRequest.photoStorageId }
       : "skip"
   );
+
+  // Prev/Next navigation in modal
+  const currentIndex = requests?.findIndex(r => r._id === selectedRequestId) ?? -1;
+  const hasPrev = currentIndex > 0;
+  const hasNext = requests ? currentIndex < requests.length - 1 : false;
+  const goToPrev = () => {
+    if (hasPrev && requests) setSelectedRequestId(requests[currentIndex - 1]._id as Id<"maintenanceRequests">);
+  };
+  const goToNext = () => {
+    if (hasNext && requests) setSelectedRequestId(requests[currentIndex + 1]._id as Id<"maintenanceRequests">);
+  };
+
+  const handleSort = (field: SortField) => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+    } else {
+      setSortBy(field);
+      setSortOrder("desc");
+    }
+  };
+
+  const SortIcon = ({ field }: { field: SortField }) => {
+    if (sortBy !== field) return null;
+    return sortOrder === "desc"
+      ? <ChevronDown className="h-3 w-3 inline ml-0.5" />
+      : <ChevronUp className="h-3 w-3 inline ml-0.5" />;
+  };
 
   const hasActiveFilters =
     statusFilter !== "all" ||
@@ -230,9 +277,9 @@ export function RequestTable() {
       </div>
 
       {/* Results count */}
-      {requests && (
+      {result && (
         <p className="text-xs text-muted-foreground px-1">
-          {t("common.resultsCount", { count: requests.length })}
+          {t("common.resultsCount", { count: totalCount })}
         </p>
       )}
 
@@ -277,6 +324,7 @@ export function RequestTable() {
                     <CatIcon className="h-3.5 w-3.5 shrink-0" style={{ color: catConfig.color }} />
                     <span className="text-xs">{t(`categories.${req.category}`)}</span>
                   </div>
+                  <p className="text-xs text-muted-foreground line-clamp-1">{req.description}</p>
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="border-0 text-xs" style={{
                       backgroundColor: statusConfig.bgColor,
@@ -305,9 +353,24 @@ export function RequestTable() {
                     <TableHead>{t("requests.studentName")}</TableHead>
                     <TableHead>{t("common.room")}</TableHead>
                     <TableHead>{t("common.category")}</TableHead>
-                    <TableHead>{t("common.priority")}</TableHead>
-                    <TableHead>{t("common.status")}</TableHead>
-                    <TableHead>{t("common.date")}</TableHead>
+                    <TableHead
+                      className="cursor-pointer select-none hover:text-foreground"
+                      onClick={() => handleSort("priority")}
+                    >
+                      {t("common.priority")} <SortIcon field="priority" />
+                    </TableHead>
+                    <TableHead
+                      className="cursor-pointer select-none hover:text-foreground"
+                      onClick={() => handleSort("status")}
+                    >
+                      {t("common.status")} <SortIcon field="status" />
+                    </TableHead>
+                    <TableHead
+                      className="cursor-pointer select-none hover:text-foreground"
+                      onClick={() => handleSort("createdAt")}
+                    >
+                      {t("common.date")} <SortIcon field="createdAt" />
+                    </TableHead>
                     <TableHead>{t("common.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -372,6 +435,33 @@ export function RequestTable() {
               </Table>
             </div>
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-3 pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage === 0}
+                onClick={() => setCurrentPage(currentPage - 1)}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                {t("common.previous")}
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                {t("common.page")} {currentPage + 1} {t("common.of")} {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage >= totalPages - 1}
+                onClick={() => setCurrentPage(currentPage + 1)}
+              >
+                {t("common.next")}
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+          )}
         </>
       )}
 
@@ -382,84 +472,112 @@ export function RequestTable() {
       >
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto rounded-xl">
           <DialogHeader>
-            <DialogTitle>
-              {selectedRequest
-                ? `${t("common.details")} - ${t(`categories.${selectedRequest.category}`)}`
-                : t("common.details")}
-            </DialogTitle>
+            <div className="flex items-center justify-between">
+              <DialogTitle>
+                {selectedRequest
+                  ? `${t("common.details")} - ${t(`categories.${selectedRequest.category}`)}`
+                  : t("common.details")}
+              </DialogTitle>
+              {/* Position indicator */}
+              {currentIndex >= 0 && requests && (
+                <span className="text-xs text-muted-foreground shrink-0">
+                  {currentPage * ITEMS_PER_PAGE + currentIndex + 1} {t("common.of")} {totalCount}
+                </span>
+              )}
+            </div>
           </DialogHeader>
           {selectedRequest && (
-            <>
-
-              <div className="space-y-4">
-                {/* Student info */}
-                <div className="bg-accent rounded-xl p-3">
-                  <p className="text-sm font-semibold">{selectedRequest.studentName}</p>
-                  <p className="text-xs text-muted-foreground">{selectedRequest.studentEmail}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {t("common.room")} {selectedRequest.roomNumber}{selectedRequest.building}
-                  </p>
-                  {selectedRequest.studentEmail && (
-                    <Button asChild size="sm" variant="outline" className="mt-2 h-7 text-xs">
-                      <a href={`mailto:${selectedRequest.studentEmail}`}>
-                        <Mail className="h-3 w-3 mr-1" /> Email
-                      </a>
-                    </Button>
-                  )}
-                </div>
-
-                <Separator />
-
-                {/* Request details */}
-                <div className="flex gap-2">
-                  <Badge variant="outline" className="border-0" style={{
-                    backgroundColor: REQUEST_STATUSES[selectedRequest.status as RequestStatus].bgColor,
-                    color: REQUEST_STATUSES[selectedRequest.status as RequestStatus].color,
-                  }}>
-                    {t(`statuses.${selectedRequest.status}`)}
-                  </Badge>
-                  <Badge variant="outline" className="border-0" style={{
-                    backgroundColor: REQUEST_PRIORITIES[selectedRequest.priority as RequestPriority].bgColor,
-                    color: REQUEST_PRIORITIES[selectedRequest.priority as RequestPriority].color,
-                  }}>
-                    {t(`priorities.${selectedRequest.priority}`)}
-                  </Badge>
-                </div>
-
-                <p className="text-sm leading-relaxed">{selectedRequest.description}</p>
-
-                {photoUrl && (
-                  <img
-                    src={photoUrl}
-                    alt="Request photo"
-                    className="w-full rounded-xl object-cover max-h-64"
-                  />
-                )}
-
-                {selectedRequest.rejectionReason && (
-                  <div className="bg-destructive/10 rounded-xl p-3">
-                    <p className="text-sm font-semibold text-destructive mb-1">
-                      {t("requests.rejectionReason")}
-                    </p>
-                    <p className="text-sm">{selectedRequest.rejectionReason}</p>
-                  </div>
-                )}
-
+            <div className="space-y-4">
+              {/* Student info */}
+              <div className="bg-accent rounded-xl p-3">
+                <p className="text-sm font-semibold">{selectedRequest.studentName}</p>
+                <p className="text-xs text-muted-foreground">{selectedRequest.studentEmail}</p>
                 <p className="text-xs text-muted-foreground">
-                  {format(new Date(selectedRequest.createdAt), "dd/MM/yyyy HH:mm", {
-                    locale: dateLocale,
-                  })}
+                  {t("common.room")} {selectedRequest.roomNumber}{selectedRequest.building}
                 </p>
-
-                <Separator />
-
-                <StatusUpdater
-                  requestId={selectedRequestId!}
-                  currentStatus={selectedRequest.status as RequestStatus}
-                  onUpdated={() => setSelectedRequestId(null)}
-                />
+                {selectedRequest.studentEmail && (
+                  <Button asChild size="sm" variant="outline" className="mt-2 h-7 text-xs">
+                    <a href={`mailto:${selectedRequest.studentEmail}`}>
+                      <Mail className="h-3 w-3 mr-1" /> Email
+                    </a>
+                  </Button>
+                )}
               </div>
-            </>
+
+              <Separator />
+
+              {/* Request details */}
+              <div className="flex gap-2">
+                <Badge variant="outline" className="border-0" style={{
+                  backgroundColor: REQUEST_STATUSES[selectedRequest.status as RequestStatus].bgColor,
+                  color: REQUEST_STATUSES[selectedRequest.status as RequestStatus].color,
+                }}>
+                  {t(`statuses.${selectedRequest.status}`)}
+                </Badge>
+                <Badge variant="outline" className="border-0" style={{
+                  backgroundColor: REQUEST_PRIORITIES[selectedRequest.priority as RequestPriority].bgColor,
+                  color: REQUEST_PRIORITIES[selectedRequest.priority as RequestPriority].color,
+                }}>
+                  {t(`priorities.${selectedRequest.priority}`)}
+                </Badge>
+              </div>
+
+              <p className="text-sm leading-relaxed">{selectedRequest.description}</p>
+
+              {photoUrl && (
+                <img
+                  src={photoUrl}
+                  alt="Request photo"
+                  className="w-full rounded-xl object-cover max-h-64"
+                />
+              )}
+
+              {selectedRequest.rejectionReason && (
+                <div className="bg-destructive/10 rounded-xl p-3">
+                  <p className="text-sm font-semibold text-destructive mb-1">
+                    {t("requests.rejectionReason")}
+                  </p>
+                  <p className="text-sm">{selectedRequest.rejectionReason}</p>
+                </div>
+              )}
+
+              <p className="text-xs text-muted-foreground">
+                {format(new Date(selectedRequest.createdAt), "dd/MM/yyyy HH:mm", {
+                  locale: dateLocale,
+                })}
+              </p>
+
+              <Separator />
+
+              {/* Prev/Next navigation */}
+              <div className="flex items-center justify-between">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!hasPrev}
+                  onClick={goToPrev}
+                >
+                  <ChevronLeft className="h-4 w-4 mr-1" />
+                  {t("common.previous")}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!hasNext}
+                  onClick={goToNext}
+                >
+                  {t("common.next")}
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
+
+              <Separator />
+
+              <StatusUpdater
+                requestId={selectedRequestId!}
+                currentStatus={selectedRequest.status as RequestStatus}
+              />
+            </div>
           )}
         </DialogContent>
       </Dialog>

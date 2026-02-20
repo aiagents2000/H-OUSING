@@ -48,7 +48,7 @@ export default function StaffDashboard() {
       ? Math.round((stats.avgResolutionTimeMs ?? 0) / (1000 * 60 * 60))
       : 0;
 
-  const recent = recentRequests?.slice(0, 5) || [];
+  const recent = recentRequests?.data?.slice(0, 5) || [];
 
   return (
     <div className="space-y-6">

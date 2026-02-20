@@ -53,7 +53,7 @@ export function Sidebar({ role }: SidebarProps) {
     <nav className="h-full py-4 px-3 space-y-1" role="navigation" aria-label="Main navigation">
       {navItems.map((item) => {
         const Icon = item.icon;
-        const isActive = pathname === item.href;
+        const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
 
         return (
           <Link

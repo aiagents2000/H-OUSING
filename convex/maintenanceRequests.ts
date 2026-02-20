@@ -131,10 +131,14 @@ export const getAllRequests = query({
     ),
     building: v.optional(v.union(v.literal("A"), v.literal("B"))),
     searchQuery: v.optional(v.string()),
+    page: v.optional(v.number()),
+    pageSize: v.optional(v.number()),
+    sortBy: v.optional(v.string()),
+    sortOrder: v.optional(v.union(v.literal("asc"), v.literal("desc"))),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return [];
+    if (!identity) return { data: [], totalCount: 0 };
 
     let requests = await ctx.db
       .query("maintenanceRequests")
@@ -166,9 +170,10 @@ export const getAllRequests = query({
       })
     );
 
+    let filtered = enriched;
     if (args.searchQuery) {
       const query = args.searchQuery.toLowerCase();
-      return enriched.filter(
+      filtered = enriched.filter(
         (r) =>
           r.studentName.toLowerCase().includes(query) ||
           r.roomNumber.includes(query) ||
@@ -176,7 +181,34 @@ export const getAllRequests = query({
       );
     }
 
-    return enriched;
+    // Sorting
+    const sortBy = args.sortBy || "createdAt";
+    const sortOrder = args.sortOrder || "desc";
+    const priorityOrder: Record<string, number> = { urgent: 0, high: 1, medium: 2, low: 3 };
+    const statusOrder: Record<string, number> = { open: 0, in_progress: 1, completed: 2, rejected: 3 };
+
+    filtered.sort((a, b) => {
+      let comparison = 0;
+      if (sortBy === "priority") {
+        comparison = (priorityOrder[a.priority] ?? 4) - (priorityOrder[b.priority] ?? 4);
+      } else if (sortBy === "status") {
+        comparison = (statusOrder[a.status] ?? 4) - (statusOrder[b.status] ?? 4);
+      } else {
+        comparison = a.createdAt - b.createdAt;
+      }
+      return sortOrder === "desc" ? -comparison : comparison;
+    });
+
+    const totalCount = filtered.length;
+
+    // Pagination
+    if (args.page !== undefined) {
+      const pageSize = args.pageSize || 20;
+      const offset = args.page * pageSize;
+      filtered = filtered.slice(offset, offset + pageSize);
+    }
+
+    return { data: filtered, totalCount };
   },
 });
 

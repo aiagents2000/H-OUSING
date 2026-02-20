@@ -56,7 +56,10 @@ export function RequestForm() {
 
     const validation = validateImageFile(file);
     if (!validation.valid) {
-      toast.error(validation.error);
+      const errorMsg = validation.errorCode === "invalid_type"
+        ? t("errors.imageInvalidType")
+        : t("errors.imageTooLarge");
+      toast.error(errorMsg);
       return;
     }
 
@@ -65,7 +68,7 @@ export function RequestForm() {
       setImageFile(compressed);
       setImagePreview(URL.createObjectURL(compressed));
     } catch {
-      toast.error("Failed to process image");
+      toast.error(t("errors.imageProcessing"));
     }
   };
 
@@ -116,7 +119,7 @@ export function RequestForm() {
       setShowSuccess(true);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to create request");
+      toast.error(t("errors.createRequest"));
     } finally {
       setLoading(false);
     }
@@ -315,7 +318,7 @@ export function RequestForm() {
             </div>
             <DialogTitle className="text-xl">{t("requests.created")}</DialogTitle>
             <DialogDescription>
-              {t("requests.noRequestsDesc")}
+              {t("requests.createdDesc")}
             </DialogDescription>
           </DialogHeader>
           <Button
