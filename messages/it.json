@@ -194,7 +194,12 @@
     "bookServices": "Prenota Servizi",
     "bookServicesDesc": "Prenota esperienze, corsi e attività alla Marina",
     "marketplace": "Marketplace",
-    "marketplaceDesc": "Compra e vendi barche nel marketplace della Marina"
+    "marketplaceDesc": "Compra e vendi barche nel marketplace della Marina",
+    "bookServicesTitle": "Prenota Servizi",
+    "bookServicesLoading": "Caricamento servizi marina…",
+    "bookServicesFallbackTitle": "Vista incorporata non disponibile",
+    "bookServicesFallbackBody": "Apri la pagina di prenotazione in una nuova scheda.",
+    "openInNewTab": "Apri in nuova scheda"
   },
   "analytics": {
     "title": "Analisi",

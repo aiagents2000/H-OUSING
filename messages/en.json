@@ -194,7 +194,12 @@
     "bookServices": "Book Services",
     "bookServicesDesc": "Book experiences, courses, and activities at the Marina",
     "marketplace": "Marketplace",
-    "marketplaceDesc": "Buy and sell boats at the Marina marketplace"
+    "marketplaceDesc": "Buy and sell boats at the Marina marketplace",
+    "bookServicesTitle": "Book Services",
+    "bookServicesLoading": "Loading marina services…",
+    "bookServicesFallbackTitle": "Couldn't load embedded view",
+    "bookServicesFallbackBody": "Open the marina booking page in a new tab.",
+    "openInNewTab": "Open in new tab"
   },
   "analytics": {
     "title": "Analytics",
