@@ -12,7 +12,8 @@
     "analytics": "Analytics",
     "announcements": "Announcements",
     "logout": "Logout",
-    "language": "Language"
+    "language": "Language",
+    "aiAssistant": "AI Assistant"
   },
   "common": {
     "loading": "Loading...",
@@ -79,6 +80,8 @@
   },
   "dashboard": {
     "welcome": "Welcome, {name}",
+    "chatCardTitle": "AI Assistant",
+    "chatCardSubtitle": "Ask me anything",
     "activeRequests": "Active Requests",
     "yourRoom": "Your Room",
     "totalRequests": "Total Requests",
@@ -205,12 +208,37 @@
     "hours": "hours",
     "days": "days"
   },
-  "door": {
-    "openDoor": "Open Door",
-    "opening": "Opening...",
-    "opened": "Door Opened",
-    "openedDesc": "The door will stay unlocked for 5 seconds",
-    "building": "Building {building} - Main Entrance"
+  "chat": {
+    "title": "AI Assistant",
+    "subtitle": "Powered by Claude AI",
+    "aiAssistant": "AI Assistant",
+    "welcomeMessage": "Hi! I'm your H-OUSING AI assistant. I can help you create or update maintenance requests, answer questions about accommodation rules, or provide emergency contacts. How can I help you today?",
+    "inputPlaceholder": "Ask me anything...",
+    "errorMessage": "Unable to connect to AI. Please try again.",
+    "requestCreated": "Maintenance request created successfully!",
+    "statusUpdated": "Request status updated successfully",
+    "actionCompleted": "Action completed (ID: {id})",
+    "actionCancelled": "Action cancelled",
+    "confirmAction": "Confirm",
+    "cancelAction": "Cancel",
+    "proposedAction": "Proposed Action",
+    "actionTypeCreate": "New Request",
+    "actionTypeUpdate": "Update Request",
+    "actionTypeComplete": "Complete Request",
+    "actionConfirmed": "Action confirmed",
+    "actionCancelledLabel": "Action cancelled",
+    "suggestions": {
+      "quietHours": "Quiet hours",
+      "reportIssue": "Report an issue",
+      "guestPolicy": "Guest policy",
+      "marinaServices": "Marina services"
+    },
+    "suggestionPrompts": {
+      "quietHours": "What are the quiet hours?",
+      "reportIssue": "I want to report a maintenance issue",
+      "guestPolicy": "What's the guest policy?",
+      "marinaServices": "What marina services are available?"
+    }
   },
   "info": {
     "faq": {

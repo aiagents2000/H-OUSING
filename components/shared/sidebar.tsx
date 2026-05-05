@@ -13,6 +13,7 @@ import {
   ClipboardList,
   BarChart3,
   Megaphone,
+  Bot,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -35,6 +36,7 @@ export function Sidebar({ role }: SidebarProps) {
       icon: ClipboardList,
       badge: stats && "active" in stats ? stats.active : undefined,
     },
+    { href: "/chat", label: t("aiAssistant"), icon: Bot },
   ];
 
   const staffNav = [

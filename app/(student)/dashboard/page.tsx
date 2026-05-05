@@ -10,11 +10,10 @@ import {
   DoorOpen,
   FileText,
   Plus,
-  UnlockKeyhole,
-  Check,
-  Loader2,
   Megaphone,
   AlertTriangle,
+  MessageSquareDot,
+  ChevronRight,
 } from "lucide-react";
 import { StatCard } from "@/components/student/dashboard-stats";
 import { RequestCard } from "@/components/student/request-card";
@@ -23,16 +22,13 @@ import { CardSkeleton } from "@/components/shared/loading-states";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { it, enUS } from "date-fns/locale";
 import { useAppLocale } from "@/lib/i18n";
-import { useDoorOpen } from "@/hooks/use-door-open";
 
 export default function StudentDashboard() {
   const t = useTranslations("dashboard");
   const tc = useTranslations("common");
-  const td = useTranslations("door");
   const ta = useTranslations("announcements");
   const { locale } = useAppLocale();
   const dateLocale = locale === "it" ? it : enUS;
@@ -41,7 +37,6 @@ export default function StudentDashboard() {
   const requests = useQuery(api.maintenanceRequests.getRequestsByStudent, {});
   const announcements = useQuery(api.announcements.list);
   const [selectedRequest, setSelectedRequest] = useState<(typeof recentRequests)[number] | null>(null);
-  const { doorState, handleDoorOpen } = useDoorOpen();
 
   const recentAnnouncements = announcements?.slice(0, 3) || [];
 
@@ -69,46 +64,21 @@ export default function StudentDashboard() {
         </h1>
       </div>
 
-      {/* Door Opening Button - prominent card */}
-      <button
-        onClick={handleDoorOpen}
-        disabled={doorState !== "idle"}
-        className={cn(
-          "w-full rounded-2xl p-4 transition-all duration-300 active:scale-[0.98]",
-          "flex items-center gap-4 text-left",
-          "shadow-md border border-white/20",
-          doorState === "opened"
-            ? "bg-gradient-to-r from-green-500 to-emerald-600"
-            : "bg-gradient-to-r from-primary to-blue-600",
-        )}
+      <Link
+        href="/chat"
+        className="block ios-button rounded-2xl p-4 shadow-md text-white bg-gradient-to-br from-[#5856D6] to-[#7C3AED] active:scale-[0.98]"
       >
-        <div className={cn(
-          "h-14 w-14 rounded-2xl flex items-center justify-center shrink-0",
-          "bg-white/20 backdrop-blur-sm",
-        )}>
-          {doorState === "opening" ? (
-            <Loader2 className="h-7 w-7 text-white animate-spin" />
-          ) : doorState === "opened" ? (
-            <Check className="h-7 w-7 text-white" />
-          ) : (
-            <UnlockKeyhole className="h-7 w-7 text-white" />
-          )}
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+            <MessageSquareDot className="h-5 w-5" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold">{t("chatCardTitle")}</p>
+            <p className="text-xs text-white/80 truncate">{t("chatCardSubtitle")}</p>
+          </div>
+          <ChevronRight className="h-5 w-5 text-white/70 shrink-0" />
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-white font-bold text-base">
-            {doorState === "opening"
-              ? td("opening")
-              : doorState === "opened"
-                ? td("opened")
-                : td("openDoor")}
-          </p>
-          <p className="text-white/70 text-sm">
-            {doorState === "opened"
-              ? td("openedDesc")
-              : td("building", { building: currentUser.building || "A" })}
-          </p>
-        </div>
-      </button>
+      </Link>
 
       {/* Stats grid - 2x2 square cards on mobile, 4-col on desktop */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

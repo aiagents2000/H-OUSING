@@ -12,7 +12,8 @@
     "analytics": "Analisi",
     "announcements": "Comunicazioni",
     "logout": "Esci",
-    "language": "Lingua"
+    "language": "Lingua",
+    "aiAssistant": "Assistente AI"
   },
   "common": {
     "loading": "Caricamento...",
@@ -79,6 +80,8 @@
   },
   "dashboard": {
     "welcome": "Benvenuto, {name}",
+    "chatCardTitle": "Assistente AI",
+    "chatCardSubtitle": "Chiedimi qualsiasi cosa",
     "activeRequests": "Richieste Attive",
     "yourRoom": "La Tua Stanza",
     "totalRequests": "Totale Richieste",
@@ -205,12 +208,37 @@
     "hours": "ore",
     "days": "giorni"
   },
-  "door": {
-    "openDoor": "Apri Porta",
-    "opening": "Apertura...",
-    "opened": "Porta Aperta",
-    "openedDesc": "La porta resterà aperta per 5 secondi",
-    "building": "Edificio {building} - Ingresso Principale"
+  "chat": {
+    "title": "Assistente AI",
+    "subtitle": "Powered by Claude AI",
+    "aiAssistant": "Assistente AI",
+    "welcomeMessage": "Ciao! Sono il tuo assistente AI per H-OUSING. Posso aiutarti a creare o aggiornare richieste di manutenzione, rispondere a domande sul regolamento o fornirti i contatti di emergenza. Come posso aiutarti?",
+    "inputPlaceholder": "Scrivi un messaggio...",
+    "errorMessage": "Impossibile connettersi all'AI. Riprova.",
+    "requestCreated": "Richiesta di manutenzione creata con successo!",
+    "statusUpdated": "Stato della richiesta aggiornato con successo",
+    "actionCompleted": "Azione completata (ID: {id})",
+    "actionCancelled": "Azione annullata",
+    "confirmAction": "Conferma",
+    "cancelAction": "Annulla",
+    "proposedAction": "Azione Proposta",
+    "actionTypeCreate": "Nuova Richiesta",
+    "actionTypeUpdate": "Aggiorna Richiesta",
+    "actionTypeComplete": "Completa Richiesta",
+    "actionConfirmed": "Azione confermata",
+    "actionCancelledLabel": "Azione annullata",
+    "suggestions": {
+      "quietHours": "Orari silenzio",
+      "reportIssue": "Segnala un guasto",
+      "guestPolicy": "Regolamento ospiti",
+      "marinaServices": "Servizi marina"
+    },
+    "suggestionPrompts": {
+      "quietHours": "Quali sono gli orari del silenzio?",
+      "reportIssue": "Voglio segnalare un guasto in stanza",
+      "guestPolicy": "Qual è il regolamento ospiti?",
+      "marinaServices": "Quali servizi marina sono disponibili?"
+    }
   },
   "info": {
     "faq": {
