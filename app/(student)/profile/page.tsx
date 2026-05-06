@@ -99,13 +99,13 @@ export default function ProfilePage() {
       <Card className="ios-card">
         <CardContent className="p-6">
           <div className="flex flex-col items-center mb-6">
-            <Avatar className="h-24 w-24 mb-3">
+            <Avatar className="h-24 w-24 mb-3 ring-4 ring-primary/10">
               <AvatarImage src={currentUser.photoUrl} />
               <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">
                 {initials}
               </AvatarFallback>
             </Avatar>
-            <h2 className="text-xl font-bold">{currentUser.fullName}</h2>
+            <h2 className="text-lg font-semibold">{currentUser.fullName}</h2>
             <Badge variant="secondary" className="mt-1">
               {currentUser.role === "student" ? "Student" : "Staff"}
             </Badge>
@@ -113,9 +113,14 @@ export default function ProfilePage() {
 
           <Separator className="mb-4" />
 
-          <div className="space-y-4">
+          <div className="-mx-6">
             {fields.map((field, i) => (
-              <div key={i} className="flex justify-between items-center">
+              <div
+                key={i}
+                className={`flex justify-between items-center px-6 py-3 ${
+                  i % 2 === 0 ? "bg-accent/30" : ""
+                }`}
+              >
                 <span className="text-sm text-muted-foreground">
                   {field.label}
                 </span>
@@ -212,7 +217,7 @@ export default function ProfilePage() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-accent active:bg-accent"
+                    className="flex items-center gap-3 px-4 py-3.5 transition-colors duration-150 hover:bg-accent active:bg-accent"
                     style={i < infoLinks.length - 1 ? { borderBottom: "1px solid var(--border)" } : undefined}
                   >
                     <Icon className="h-5 w-5 text-primary shrink-0" />

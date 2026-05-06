@@ -25,7 +25,7 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-border/50 lg:hidden pwa-safe-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-t border-border/50 lg:hidden pwa-safe-bottom">
       <div className="flex items-end justify-around px-2 pt-1.5 pb-1.5">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -39,11 +39,11 @@ export function BottomNav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex flex-col items-center min-w-[56px]"
+                className="flex flex-col items-center min-w-[56px] transition-all duration-200"
               >
                 <div
                   className={cn(
-                    "h-14 w-14 rounded-full flex items-center justify-center -mt-4 shadow-lg transition-all duration-200 active:scale-95",
+                    "h-12 w-12 rounded-full flex items-center justify-center -mt-3 shadow-[0_4px_12px_rgba(0,122,255,0.3)] transition-all duration-200 active:scale-95",
                     isActive ? "bg-primary/90" : "bg-primary"
                   )}
                 >
@@ -51,8 +51,8 @@ export function BottomNav() {
                 </div>
                 <span
                   className={cn(
-                    "text-[10px] mt-0.5 leading-tight font-medium",
-                    isActive ? "text-primary" : "text-muted-foreground"
+                    "text-[9px] mt-0.5 leading-tight font-medium tracking-wide",
+                    isActive ? "text-primary" : "text-muted-foreground opacity-60"
                   )}
                 >
                   {item.label}
@@ -66,14 +66,14 @@ export function BottomNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center justify-center py-1 px-2 min-w-[56px] transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground"
+                "flex flex-col items-center justify-center py-1 px-2 min-w-[56px] transition-all duration-200",
+                isActive ? "text-primary" : "text-muted-foreground opacity-60"
               )}
             >
               <Icon className={cn("h-5 w-5", isActive && "stroke-[2.5]")} />
               <span
                 className={cn(
-                  "text-[10px] mt-0.5 leading-tight",
+                  "text-[9px] mt-0.5 leading-tight tracking-wide",
                   isActive ? "font-semibold" : "font-medium"
                 )}
               >

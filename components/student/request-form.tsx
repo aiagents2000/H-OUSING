@@ -25,7 +25,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Loader2, Upload, X, CheckCircle2 } from "lucide-react";
+import { Loader2, Camera, X, CheckCircle2 } from "lucide-react";
 import { REQUEST_CATEGORIES, REQUEST_PRIORITIES } from "@/lib/constants";
 import { compressImage } from "@/lib/image-compression";
 import { validateImageFile } from "@/lib/validation";
@@ -170,7 +170,7 @@ export function RequestForm() {
                   setErrors({ ...errors, category: "" });
                 }}
               >
-                <SelectTrigger className={errors.category ? "border-destructive" : ""}>
+                <SelectTrigger className={`h-12 ${errors.category ? "border-destructive" : ""}`}>
                   <SelectValue placeholder={t("requests.selectCategory")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -205,7 +205,7 @@ export function RequestForm() {
                   setErrors({ ...errors, priority: "" });
                 }}
               >
-                <SelectTrigger className={errors.priority ? "border-destructive" : ""}>
+                <SelectTrigger className={`h-12 ${errors.priority ? "border-destructive" : ""}`}>
                   <SelectValue placeholder={t("requests.selectPriority")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -239,7 +239,7 @@ export function RequestForm() {
                     setErrors({ ...errors, description: "" });
                   }
                 }}
-                rows={4}
+                rows={3}
                 className={errors.description ? "border-destructive" : ""}
               />
               <div className="flex justify-between">
@@ -274,8 +274,8 @@ export function RequestForm() {
                   </button>
                 </div>
               ) : (
-                <label className="flex flex-col items-center justify-center h-24 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary/50 transition-colors">
-                  <Upload className="h-6 w-6 text-muted-foreground mb-1" />
+                <label className="flex flex-col items-center justify-center h-28 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary/50 transition-colors">
+                  <Camera className="h-6 w-6 text-primary/50 mb-1" />
                   <span className="text-xs text-muted-foreground">
                     {t("requests.uploadPhotoDesc")}
                   </span>
@@ -292,7 +292,7 @@ export function RequestForm() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full ios-button h-12"
+              className="w-full ios-button h-12 text-base font-semibold shadow-[0_4px_12px_rgba(0,122,255,0.25)]"
             >
               {loading ? (
                 <>
@@ -313,7 +313,7 @@ export function RequestForm() {
       }}>
         <DialogContent className="text-center rounded-xl">
           <DialogHeader>
-            <div className="mx-auto mb-4">
+            <div className="mx-auto mb-4 animate-[bounce_0.5s_ease-in-out_1]">
               <CheckCircle2 className="h-16 w-16 text-[#34C759]" />
             </div>
             <DialogTitle className="text-xl">{t("requests.created")}</DialogTitle>

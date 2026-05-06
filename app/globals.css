@@ -124,6 +124,18 @@
   .ios-button {
     @apply rounded-lg transition-all duration-150 active:scale-[0.97];
   }
+  .ios-pressable {
+    @apply transition-all duration-150 active:scale-[0.97] active:opacity-90;
+  }
+  .ios-glass {
+    @apply bg-white/80 backdrop-blur-xl;
+  }
+  .ios-card-interactive {
+    @apply bg-card rounded-xl shadow-sm border border-border/50 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all duration-200;
+  }
+  .ios-button-primary {
+    @apply rounded-lg bg-primary text-primary-foreground shadow-[0_4px_12px_rgba(0,122,255,0.25)] hover:shadow-[0_6px_16px_rgba(0,122,255,0.35)] transition-all duration-150 active:scale-[0.97];
+  }
   .touch-target {
     min-height: 44px;
     min-width: 44px;
@@ -142,5 +154,19 @@
   }
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+  .page-animate-in {
+    animation: fadeSlideIn 0.3s ease-out;
+  }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

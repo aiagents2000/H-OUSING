@@ -80,6 +80,7 @@
   },
   "dashboard": {
     "welcome": "Benvenuto, {name}",
+    "welcomeBack": "Bentornato",
     "chatCardTitle": "Assistente AI",
     "chatCardSubtitle": "Chiedimi qualsiasi cosa",
     "activeRequests": "Richieste Attive",

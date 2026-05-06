@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useMutation } from "convex/react";
 import { useTranslations } from "next-intl";
-import { Bot, Send, Loader2 } from "lucide-react";
+import { Bot, Send, Loader2, Moon, Wrench, Users, Anchor } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
@@ -235,10 +235,10 @@ export function ChatInterface({ currentUser, activeRequests }: ChatInterfaceProp
   };
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-3.5rem-5rem)] lg:h-[calc(100dvh-3.5rem-2rem)]">
+    <div className="flex flex-col h-[calc(100dvh-3rem-5rem)] lg:h-[calc(100dvh-3.5rem-2rem)]">
       {/* Page header */}
       <div className="flex items-center gap-3 mb-4 shrink-0">
-        <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center shrink-0">
+        <div className="h-11 w-11 rounded-full bg-primary flex items-center justify-center shrink-0 ring-2 ring-primary/20">
           <Bot className="h-5 w-5 text-white" />
         </div>
         <div>
@@ -266,13 +266,19 @@ export function ChatInterface({ currentUser, activeRequests }: ChatInterfaceProp
       {messages.length === 1 && !isLoading && (
         <div className="shrink-0 pb-2 -mx-1 overflow-x-auto scrollbar-hide">
           <div className="flex gap-2 px-1">
-            {(["quietHours", "reportIssue", "guestPolicy", "marinaServices"] as const).map((key) => (
+            {([
+              { key: "quietHours", icon: Moon },
+              { key: "reportIssue", icon: Wrench },
+              { key: "guestPolicy", icon: Users },
+              { key: "marinaServices", icon: Anchor },
+            ] as const).map(({ key, icon: ChipIcon }) => (
               <button
                 key={key}
                 type="button"
                 onClick={() => sendMessage(t(`suggestionPrompts.${key}`))}
-                className="shrink-0 px-3 py-1.5 rounded-full bg-card border border-border/50 text-xs font-medium text-foreground hover:bg-accent ios-button"
+                className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border/50 text-xs font-medium text-foreground hover:bg-accent ios-button"
               >
+                <ChipIcon className="h-3.5 w-3.5 text-primary" />
                 {t(`suggestions.${key}`)}
               </button>
             ))}
@@ -295,14 +301,14 @@ export function ChatInterface({ currentUser, activeRequests }: ChatInterfaceProp
             onKeyDown={handleKeyDown}
             placeholder={t("inputPlaceholder")}
             rows={1}
-            className="flex-1 resize-none rounded-2xl border-border/50 bg-card min-h-[44px] max-h-[120px]"
+            className="flex-1 resize-none rounded-2xl border-border/50 bg-card min-h-[44px] max-h-[120px] shadow-sm focus:shadow-md transition-shadow"
             disabled={isLoading}
           />
           <Button
             type="submit"
             size="icon"
             disabled={isLoading || !inputValue.trim()}
-            className="h-11 w-11 rounded-full bg-primary hover:bg-primary/90 ios-button shrink-0"
+            className="h-11 w-11 rounded-full bg-primary hover:bg-primary/90 ios-button shrink-0 disabled:shadow-none shadow-[0_2px_8px_rgba(0,122,255,0.3)]"
           >
             {isLoading ? (
               <Loader2 className="h-5 w-5 animate-spin" />

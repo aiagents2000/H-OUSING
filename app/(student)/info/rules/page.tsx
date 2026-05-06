@@ -27,10 +27,10 @@ export default function RulesPage() {
 
       <Card className="ios-card">
         <CardContent className="p-3 sm:p-6">
-          <Accordion type="multiple" className="w-full">
+          <Accordion type="multiple" className="w-full rounded-xl overflow-hidden">
             {sections.map((section, i) => (
               <AccordionItem key={i} value={`section-${i}`}>
-                <AccordionTrigger className="text-sm sm:text-base font-semibold text-left px-1 py-4 hover:no-underline">
+                <AccordionTrigger className="text-sm sm:text-base font-semibold text-left px-1 py-4 hover:no-underline hover:bg-accent/50 active:bg-accent transition-colors">
                   {i + 1}. {section.title}
                 </AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground px-1 pb-4 leading-relaxed">

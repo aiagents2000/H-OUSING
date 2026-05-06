@@ -49,11 +49,11 @@ export default function MarinaServicesPage() {
           const Icon = service.icon;
           const TrailingIcon = service.external ? ExternalLink : ChevronRight;
           const cardInner = (
-            <Card className="ios-card active:scale-[0.98] transition-transform cursor-pointer">
+            <Card className="ios-card active:scale-[0.98] transition-all cursor-pointer shadow-sm hover:shadow-md group">
               <CardContent className="p-4 sm:p-5">
                 <div className="flex items-center gap-4">
                   <div
-                    className="h-14 w-14 rounded-2xl flex items-center justify-center shrink-0"
+                    className="h-14 w-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-active:scale-95"
                     style={{ backgroundColor: `${service.color}12` }}
                   >
                     <Icon className="h-7 w-7" style={{ color: service.color }} />

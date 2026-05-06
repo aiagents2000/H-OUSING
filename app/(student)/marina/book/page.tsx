@@ -22,7 +22,7 @@ export default function MarinaBookPage() {
   }, [loaded]);
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-3.5rem-2rem-6rem)] lg:h-[calc(100dvh-3.5rem-4rem)] -mx-4 md:-mx-6 lg:-mx-8 -mt-4 md:-mt-6 lg:-mt-8">
+    <div className="flex flex-col h-[calc(100dvh-3rem-2rem-6rem)] lg:h-[calc(100dvh-3.5rem-4rem)] -mx-4 md:-mx-6 lg:-mx-8 -mt-4 md:-mt-6 lg:-mt-8">
       <div className="flex items-center justify-between gap-3 px-4 md:px-6 lg:px-8 py-3 border-b border-border/50 shrink-0 bg-background">
         <Link
           href="/room"

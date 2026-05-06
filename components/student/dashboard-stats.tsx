@@ -13,7 +13,7 @@ interface StatCardProps {
 
 export function StatCard({ icon: Icon, label, value, sublabel, color = "#007AFF" }: StatCardProps) {
   return (
-    <Card className="ios-card">
+    <Card className="ios-card hover:scale-[1.02] active:scale-[0.98] transition-transform duration-150">
       {/* Mobile: square, vertical centered layout */}
       <CardContent className="p-4 sm:p-4">
         <div className="flex flex-col items-center justify-center text-center gap-2 aspect-square sm:aspect-auto sm:flex-row sm:text-left sm:items-center sm:gap-3">

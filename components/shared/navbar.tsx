@@ -37,8 +37,8 @@ export function Navbar({ onMenuToggle }: NavbarProps) {
     .toUpperCase() || "?";
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-border/50">
-      <div className="flex items-center justify-between h-14 px-4">
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+      <div className="flex items-center justify-between h-12 lg:h-14 px-4">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
@@ -49,7 +49,7 @@ export function Navbar({ onMenuToggle }: NavbarProps) {
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <h1 className="text-lg font-bold text-primary">H-OUSING</h1>
+          <h1 className="text-lg font-semibold text-foreground tracking-tight">H-OUSING</h1>
         </div>
 
         <div className="flex items-center gap-2">

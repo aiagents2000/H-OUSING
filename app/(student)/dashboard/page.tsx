@@ -58,17 +58,19 @@ export default function StudentDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <h1 className="text-2xl font-bold">
+      <div>
+        <h1 className="text-xl font-semibold">
           {t("welcome", { name: currentUser.fullName?.split(" ")[0] || "" })}
         </h1>
+        <p className="text-sm text-muted-foreground mt-0.5">{t("welcomeBack")}</p>
       </div>
 
       <Link
         href="/chat"
-        className="block ios-button rounded-2xl p-4 shadow-md text-white bg-gradient-to-br from-[#5856D6] to-[#7C3AED] active:scale-[0.98]"
+        className="relative overflow-hidden block ios-button rounded-2xl p-4 shadow-md text-white bg-gradient-to-br from-[#5856D6] to-[#7C3AED] active:scale-[0.98]"
       >
-        <div className="flex items-center gap-3">
+        <div className="absolute -top-4 -right-4 h-20 w-20 rounded-full bg-white/10 blur-xl pointer-events-none" />
+        <div className="relative flex items-center gap-3">
           <div className="h-10 w-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
             <MessageSquareDot className="h-5 w-5" />
           </div>
@@ -81,7 +83,7 @@ export default function StudentDashboard() {
       </Link>
 
       {/* Stats grid - 2x2 square cards on mobile, 4-col on desktop */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
         {/* Row 1: Announcements + Your Room */}
         <StatCard
           icon={Megaphone}
@@ -190,7 +192,7 @@ export default function StudentDashboard() {
       {/* Floating Action Button - mobile, positioned above bottom nav */}
       <Link
         href="/requests/new"
-        className="fixed bottom-32 right-4 lg:bottom-6 lg:right-6 lg:hidden h-14 w-14 bg-green-500 text-white rounded-full shadow-lg flex items-center justify-center active:scale-95 transition-transform z-40"
+        className="fixed bottom-32 right-4 lg:bottom-6 lg:right-6 lg:hidden h-14 w-14 bg-primary text-white rounded-full shadow-[0_4px_12px_rgba(0,122,255,0.3)] flex items-center justify-center active:scale-95 transition-transform z-40"
         aria-label="New request"
       >
         <Plus className="h-6 w-6" />
